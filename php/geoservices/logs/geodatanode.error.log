@@ -1,0 +1,20 @@
+2011-07-14 18:22:51: geodatanode::__construct - Parameter missing [OP]
+2013-03-22 19:29:19: geodatanode::handle - Error in getQuotes []
+2013-03-22 19:29:54: geodatanode::handle - Error in getQuotes []
+2013-03-22 19:36:58: geodatanode::handle - Error in getQuotes []
+2013-04-24 18:58:25: geodatanode::handle - Error in getQuotes []
+2013-04-24 18:58:32: geodatanode::handle - Error in getQuotes []
+2013-04-24 19:21:02: geodatanode::handle - Error in getQuotes []
+2013-04-24 19:56:40: geodatanode::handle - Error in getQuotes []
+2013-04-24 19:58:31: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:07:40: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:08:00: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:08:20: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:08:46: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:09:03: geodatanode::handle - Error in getQuotes []
+2013-04-24 20:48:38: geodatanode::ogr2ogr error: Array
+2013-04-24 20:52:58: geodatanode::ogr2ogr error: Array
+2013-04-24 20:53:15: geodatanode::ogr2ogr error: Array
+2013-04-24 20:53:22: geodatanode::ogr2ogr error: Array
+2013-04-24 21:14:02: geodatanode::ogr2ogr error: 127
+2013-04-24 21:14:53: geodatanode::ogr2ogr error: 127

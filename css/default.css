@@ -1,0 +1,539 @@
+html,body {
+    margin: 0px; padding: 0px;
+    font-size: 11px !important;
+    /*line-height: 1.5em;*/
+    font-family:Arial,Helvetica,sans-serif;
+    overflow: hidden;
+}
+
+table,input{
+    font-family: Arial,Helvetica,sans-serif;
+    /*font-size: 11px;*/
+}
+
+img {
+	border: 0;
+}
+
+.overlabel {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    cursor: text;
+    color: #888;
+}
+
+a {
+    color: #57b4df ;
+    text-decoration:none;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#divHeader a {
+    color: #ffffff ;
+    text-decoration:none;
+}
+
+#divHeader a:hover {
+    text-decoration: underline;
+}
+
+select {
+    /*width: 170px;*/
+    width: 100%;
+    margin: 0;
+    color: #666666;
+    border: 1px solid #B8B098;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+
+/* Blocs */
+
+#divMain{
+    clear: both;
+    background-color: #a5a4b3;
+}
+
+#divHeader{
+    background-image:url(../img/header/background.jpg);
+    background-repeat:no-repeat;
+    background-position: center right;
+    height:90px;
+    width:100%;
+    overflow: hidden;
+    background-color: #000000;
+    font-weight:bold;
+    color: #57b4df;
+	min-width: 780px;
+}
+
+#divHeaderLeft{
+    background-position:top left;
+    float: left;
+}
+
+#divHeaderRight{
+    float:right;
+    margin-right:18px;
+    margin-top: 8px;
+    text-align:right;
+    font-size:12px;
+}
+
+#divBreadcrumb {
+    position: absolute;
+    top: 60px;
+    left: 240px;
+    font-size:13px;
+}
+
+#divHeaderLinks {
+    margin-top: 10px;
+    right: 18px;
+}
+
+#divHeaderLinks a {
+    margin-left: 15px;
+}
+
+#divTop{
+    height:35px;
+    padding-top:0px;
+    position:relative;
+    width: 100%;
+	min-width: 780px;
+	z-index: 1;
+}
+
+#divTopRight a {
+    color: #000 ;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+#divTopCenter{
+    padding-top:3px;
+    padding-left: 50%;
+    text-align:left;
+}
+
+#divTopRight{
+    position: absolute;
+	top: 0px;
+	right: 5px;
+    padding:10px 10px; /* was 5px 10px */
+	padding-right: 18px;
+}
+
+#divTopLeft{
+    float: left;
+    padding:5px 5px;
+}
+
+#divTopLeftMain {
+	margin: 10px auto;
+	width: 200px;
+	text-align: center;
+	float: left;
+}
+
+#divMainLeft{
+    position: absolute;
+    background-color: #FFFFFF;
+    z-index: 1000;
+    overflow: auto;
+}
+
+#divSplitter{
+    cursor: pointer;
+    position: absolute;
+    background-color: #FFFFFF;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../img/splitter/collapsed_right.gif');
+    width: 10px;
+}
+
+#divMainRight{
+    position: absolute;
+}
+
+#divMap {
+    padding: 2px;
+    position: absolute;
+}
+
+#divStatusBar{
+	color:#212121;
+    z-index: 100;
+    margin-left: 105px;
+    border: 0px solid #000000;
+    font-size:9px;
+    font-weight: bold;
+    width: 140px;
+	background-color: transparent;
+	position: relative;
+}
+
+#divRightTools{
+    position:absolute;
+    padding:2px;
+    display:inline;
+    /*border: 1px solid #69502B;*/
+    padding-left: 7px;
+    height:30px;
+	width: 300px;
+	z-index: 5;
+}
+
+#divRightToolsText{
+    display:none;
+    height:30px;
+    width:100%;
+    position:absolute;
+}
+
+#divLoadingApp {
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0%;
+    top:0%;
+    z-index:2000;
+    display:none;
+}
+
+#divScaleSelector {
+    display:inline;
+    font-size:smaller;
+    font-weight:bold;
+    margin-left:10px;
+    position:absolute;
+    right:120px;
+    width:100px;
+    z-index:100;
+}
+
+.search {
+    font-size:smaller;
+    margin-right: 10px;
+}
+
+.search li {
+    position: relative;
+    list-style: none outside none;
+    z-index:1002;
+}
+
+#divBaseLayerSwitcher{
+    text-align: right;
+    width: 251px;
+    z-index: 0 !important; /* let the search box be seen */
+}
+
+#divSlideBar{
+    position:absolute;
+    background-color:#F2F2EB;
+    padding:5px 8px;
+    width:134px; /*219px*/
+    height:25px;
+    z-index:0;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+.slideLabel {
+    font-family: Arial,sans-serif;
+    font-size: 1.1em;
+    padding-left: 2px;
+}
+
+#divInfoDialog ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#divInfoDialog li{
+    border-bottom:1px solid #e5e5e5;
+    padding: 5px;
+    list-style-type: none;
+}
+
+#divInfoDialog li.main {
+    font-weight: bold;
+    background-color: #e5e5e5;
+}
+
+
+/* Modals */
+
+#divInfoDialog {
+     z-index:1102;
+}
+
+#divOverviewMap, #divLegendDialog {
+    padding: 0px;
+    border:0px solid black;
+    color:black;
+    font-weight:bold;
+    font-size:10pt;
+}
+
+#divSheetModal #photoColumn {
+    float: right;
+    width: 30%;
+    padding: 20px;
+}
+
+#divSheetModal #textColumn {
+    float: left;
+    /* WHILE SHEET IS IN PROCESS */
+    /*width: 60%;*/
+}
+
+#divSheetModal #title {
+    font-weight:bold;
+    font-size:20pt;
+    color: #57b4df;
+    padding-top: 10px;
+}
+
+#divSheetModal #subtitle {
+    font-weight:bold;
+    font-size:13pt;
+    padding-bottom: 10px;
+}
+
+#divSheetModal #desc {
+    text-align: justify;
+    padding: 10px;
+}
+
+#divSheetModal #photoTitle {
+    text-align: justify;
+    padding: 5px;
+    color: #888;
+}
+
+#divSheetModal #links {
+    padding: 10px;
+    color: #57b4df;
+    font-weight:bold;
+    border-top:1px solid #e5e5e5;
+}
+
+#divSheetModal #links img {
+    height: 56px;
+    padding: 10px;
+}
+
+#divToolbar{
+    display:inline;
+	width: 90px;
+}
+
+#divMapLoading{
+    position: absolute;
+    z-index: 1010;
+    width: 250px;
+    height: 30px;
+
+}
+
+.divLoading{
+    margin: 5px;
+    height:80%;
+}
+
+.imgLoading{
+    vertical-align: middle;
+}
+
+.spanLoading{
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 10px
+}
+
+
+/*loading div*/
+#divMainLoading{
+    top: 88px;
+    position: absolute;
+    width: 100%;
+    height: 500px;
+    background-color: #FFFFFF;
+    vertical-align: middle;
+    z-index: 2000;
+
+}
+
+.divInner{
+    position: relative;
+    top: 40%;
+    margin-right:auto;
+    margin-left:auto;
+    border:1px dotted #908E8F;
+    background-color: #F5F5F5;
+}
+
+#divInnerLoading{
+    width: 250px;
+    padding: 25px 5px 5px 5px;
+}
+
+#divLoadingSubtitle{
+    width: 100%;
+    margin-top: 5px;
+}
+
+.txtMediumDarkGrey {
+    color: #4C4B4C;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.txtSmallItalic{
+    font-style: italic;
+    font-size: 11px;
+}
+
+#imgLoadingStreets{
+    
+    position:absolute;
+    float:right;
+    left:90%;
+    margin-top:3px
+}
+
+/* FOR FG MENU */
+.hidden { position:absolute; top:0; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+.ui-autocomplete-loading { background: white url('../img/load_small.gif') right center no-repeat; }
+
+.searchbox { 
+    background-image: url(../img/lupa.png);
+    background-position: center right;
+    background-repeat: no-repeat;
+    width: 195px;
+    -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
+}
+
+.textButton {
+	padding-left: 30px;
+}
+
+
+/* MENU JQUERY 1.9 */
+
+.ui-menu {
+    margin-bottom: 12em !important;
+    width: 170px;
+    font-weight: bold;
+    margin: 20px 10px !important;
+}
+
+#taxon-list .ui-menu {
+    border: 0;
+}
+
+.ui-menu .menuTitle, .ui-menu .menuBack {
+    border-bottom: 0px !important;
+}
+.menuBack .ui-menu-icon {
+    float: left !important;
+    margin-right: 5px;
+}
+
+#taxon-list .ui-menu .menuTitle a {
+    background-color: #2D3052;
+    color: #FFF !important;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    /*height: 14px;*/
+}
+
+.ui-menu .ui-menu-item {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.ui-menu .ui-menu-icon {
+    float: right;
+    position: static;
+}
+
+.ui-menu .ui-icon {
+    left: 0.2em;
+    top: 0.2em;
+}
+
+.ui-icon-carat-1-e {
+    background-position: -32px 0;
+}
+
+.ui-icon {
+    background-image: url("images/ui-icons_222222_256x240.png");
+    height: 16px;
+    width: 16px;
+}
+
+.ui-icon {
+    background-repeat: no-repeat;
+    display: block;
+    overflow: hidden;
+    text-indent: -99999px;
+}
+
+/* EXTRA JQUERY MODFS */
+.ui-buttonset .ui-button { 
+	min-width: 75px; 
+}
+
+.ui-dialog-content a {
+	font-weight: bold;
+}
+
+#buttonQuotesSelect, #infoQuotesSelect {
+	min-width: 0;
+}
+
+#divButtonQuotes {
+height: 1px;
+width: 170px;
+padding: 0px 5px;
+}
+
+#divInfoButton{
+width: 100px;
+height: 1px;
+}
+
+/* 2 hacks to make infoLink look good */
+.infoLink {
+	font-size: smaller !important; 
+	position: absolute; /* to be positioned over list */
+}
+
+.infoLink  li{
+	padding: 5px 0 !important;
+}
+
+#divInfoButton {
+    border-color: #57B4DF;
+    cursor: pointer;
+	/*position: absolute;
+    right: 20px;
+    top: 7px;*/
+}
