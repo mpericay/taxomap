@@ -1,0 +1,403 @@
+.egvControlButton{
+    height: 30px;
+    width: 30px;
+    margin-top: 3px;
+    /*margin-right: 3px;*/
+}
+
+
+.egvControlNavigationItemInactive {
+    background-image: url("../img/viewer/pan_inactive.png");
+}
+.egvControlNavigationItemInactive:hover {
+    background-image: url("../img/viewer/pan_active.png");
+}
+.egvControlNavigationItemActive {
+    background-image: url("../img/viewer/pan_active.png");
+}
+
+.egvControlZoomBoxItemInactive {
+    background-image: url("../img/viewer/zoom_inactive.png");
+}
+.egvControlZoomBoxItemInactive:hover {
+    background-image: url("../img/viewer/zoom_active.png");
+}
+.egvControlZoomBoxItemActive {
+    background-image: url("../img/viewer/zoom_active.png");
+}
+
+.egvControlZoomOutClickItemInactive {
+    background-image: url("../img/viewer/zoomout_over.png");
+}
+.egvControlZoomOutClickItemInactive:hover {
+    background-image: url("../img/viewer/zoomout_over.png");
+}
+.egvControlZoomOutClickItemActive {
+    background-image: url("../img/viewer/zoomout_active.png");
+}
+
+.egvControlZoomToMaxExtentItemInactive {
+    background-image: url("../img/viewer/fullextent_over.png");
+}
+.egvControlZoomToMaxExtentItemInactive:hover {
+    background-image: url("../img/viewer/fullextent_over.png");
+}
+
+.olControlInfoBoxItemInactive {
+    background-image: url("../img/viewer/info_inactive.png");
+}
+.olControlInfoBoxItemInactive:hover {
+    background-image: url("../img/viewer/info_active.png");}
+
+.olControlInfoBoxItemActive {
+    background-image: url("../img/viewer/info_active.png");
+}
+
+.egvControlWMSManagerItemInactive {
+    background-image: url("../img/viewer/wms_over.png");
+}
+.egvControlWMSManagerItemActive {
+    background-image: url("../img/viewer/wms_active.png");
+}
+
+.egvControlScaleStatusBar{
+    color: #725832;
+    background-color: #FFFFFF;
+    border:0px solid black;
+    font-family: Verdana;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.egvControlAttribution{
+    background-color: white;
+    font-size: smaller;
+    font-weight: bold;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    display: block;
+
+}
+
+.olControlPanPanel {
+    top: 50px;
+    left: 5px;
+}
+
+.olControlPanPanel div {
+    /*background-image: url(img/pan-panel.png);*/
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+    position: absolute;
+}
+
+.olControlPanPanel .olControlPanNorthItemInactive {
+    top: 0px;
+    left: 20px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/north.png);
+}
+.olControlPanPanel .olControlPanSouthItemInactive {
+    top: 40px;
+    left: 20px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/south.png);
+}
+.olControlPanPanel .olControlPanWestItemInactive {
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/west.png);
+}
+.olControlPanPanel .olControlPanEastItemInactive {
+    top: 20px;
+    left: 35px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/east.png);
+}
+
+.olControlZoomPanel {
+    top: 120px;
+    left: 25px;
+}
+
+.olControlZoomPanel div {
+    /*background-image: url(img/zoom-panel.png);*/
+    position: absolute;
+    height: 45px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.olControlZoomPanel .olControlZoomInItemInactive {
+    top: 0px;
+    left: 0px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/zoomin.png);
+}
+
+.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
+    /*top: 70px;
+    left: 0px;
+    height: 70px;
+    width: 70px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/btnGlobe.gif);*/
+    display: none;
+}
+
+.olControlZoomPanel .olControlZoomOutItemInactive {
+    top: 30px;
+    left: 0px;
+    height: 20px;
+    width: 20px;
+    background-position: 0px 0px;
+    background-image: url(../img/buttons/zoomout.png);
+}
+
+
+.olControlOverviewMapExpander {
+    float:left;
+    position:absolute;
+    top:0px;
+    left:0px;
+    border:0px solid black;
+}
+
+.olControlOverviewMapExpanderImgExpanded {
+    background-color:#498100;
+    background-image: url("../img/accordion/expanded.gif");
+    background-repeat:no-repeat;
+    background-position: 50% 50%;
+    width:0px;
+    height:0px;
+}
+
+.olControlOverviewMapExpanderImgCollapsed {
+    background-color:#498100;
+    background-image: url("../img/accordion/collapsed.gif");
+    background-repeat:no-repeat;
+    background-position: 50% 50%;
+    width:0px;
+    height:0px;
+}
+
+.divOverviewMapCollapsed {
+    background-color: aqua;
+    display:inline;
+    width:0px;
+    height:0px;
+}
+
+/*.divOverviewMapExpanded {
+    background-color: #bb0000;
+    display:inline;
+    width:200px;
+    height:200px;
+}*/
+
+div.olControlOverviewMapElement {
+    padding: 0px;
+    background-color: #FFFFFF;
+    -moz-border-radius: 0 0 0 0;
+    border:1px solid black;
+    overflow: hidden;
+    height:100px;
+    width:150px;
+    float:left;
+    display:inline;
+    position:relative;
+    top:0px;
+}
+
+
+/*styles for the layer manager*/
+.egvControlLayersManagerDivGroup{
+
+    background-color:#E3EAF5;
+    border:0 solid #B8B098;
+    color:#4D4D4D;
+    font-family:Verdana;
+    font-size:12px;
+    font-weight:bold;
+    padding:4px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.egvControlLayersManagerDivGroupChildren  {
+    margin-left: -1px;
+}
+
+
+.egvControlLayersManagerDivLayer {
+    border:0 solid #B8B098;
+
+}
+
+.egvControlLayersManagerUl {
+    border:0 solid #B8B098;
+    height:50%;
+}
+
+.egvControlLayersManagerDivLayerTitle {
+    padding-left:10px;
+}
+
+/*
+.olControlLoadingPanel {
+    background-image: url('../img/viewer/ajax-loader.gif');
+    background-position:center;
+    background-repeat:no-repeat;
+}
+*/
+.egvControlUserControlProfileItemInactive {
+    background:url('../img/viewer/profile_over.png');
+    background-repeat:no-repeat;
+    display:inline;
+    float:left;
+    /*height:27px;
+    width:14px;*/
+    cursor: default;
+}
+
+.egvControlUserControlProfileItemActive {
+    background:url('../img/viewer/profile_active.png');
+    background-repeat:no-repeat;
+    display:inline;
+    float:left;
+    /*height:27px;
+    width:14px;*/
+    cursor: default;
+}
+
+.egvControlToolBar{
+    background-color: transparent;
+    font-size: 0px;
+}
+
+.egvControlWMSManagerTitle{
+    font-weight:lighter;
+    text-align:justify;
+    color:#4D4D4D;
+    font-family:Verdana;
+    font-size:11px;
+    padding-left:10px;
+
+}
+
+.egvControlLayersManagerContainer{
+    margin:5px;
+}
+
+.egvControlLayersManagerDiv{
+    overflow:hidden;
+    width:100%;
+}
+
+.egvControlWMSManagerMainTable{
+
+    margin : 5px;
+    height: 60px;
+    font-weight:lighter;
+    text-align: justify;
+    color:#4D4D4D;
+    margin-right: 0px;
+    padding-left:0px;
+    width:90%;
+}
+
+.egvControlInfoDiv{
+    margin:0px !important;
+    background-color:#ffffff !important;
+    width:100%;
+}
+
+.egvControlInfoDivLayerTitle {
+    background-color:#e3eaf5 !important;
+    color:#4d4d4d !important;
+    font-style:normal !important;
+    font-weight:bold !important;
+    margin:0 auto !important;
+}
+
+.egvControlInfoDivCenterInMap a {
+    font-weight:bold !important;
+    cursor:pointer !important;
+    color: #A6A6A6 !important;
+    font-size: 8pt !important;
+    font-family: Arial !important;
+    text-decoration:none !important;
+}
+
+.egvControlInfoDivLayerHTML{
+    width:85% !important;
+    overflow-x:auto;
+}
+
+.egvControlPrintInputButton:hover{
+    background-color:#113366;
+    color:#FFFFFF;
+}
+
+.egvControlPrintInputButton{
+    background-color:#E3E4F5;
+    border:1px solid #222222;
+    color:#222222;
+    cursor:pointer;
+    font-family:Verdana,Helvetica,sans-serif;
+    font-size:11px;
+    overflow:visible;
+    padding:1px 4px 2px;
+    text-decoration:none;
+    width:auto;
+
+}
+
+#egvControlScaleSelectorSelect{
+    width:100px;
+}
+
+.olControlScaleLine{
+    float: right
+}
+
+.olPopupCloseBox  {
+    background:url("../img/close.png") no-repeat scroll 0 0 transparent;
+    cursor:pointer;
+}
+
+.egvControlBaseLayersSwitcherElems {
+    background-color:#F2F2EB;
+    border:medium none;
+    color:#084FA7;
+    cursor:pointer;
+    display:inline;
+    margin-right:3px;
+    padding:5px;
+    position:relative;
+    text-decoration:none;
+    top:5px;
+}
+
+.egvControlBaseLayersSwitcherActive {
+    border:2px solid;
+    font-weight:bold;
+}
+
+.egvControlInfoDivLayerFieldTitle {
+        width:100px;
+}
