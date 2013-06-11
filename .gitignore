@@ -1,8 +1,4 @@
 js/openlayers-2.12/
 js/viewer-3.0/
 php/conf.php
-<<<<<<< HEAD
 php/geoservices/config/mcnb.ini
-=======
-php/geoservices/config/mcnb.ini
->>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f

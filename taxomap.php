@@ -10,11 +10,8 @@ require_once("php/functions.php");
 
 $serverURL = "http://".$_SERVER['SERVER_NAME'];
 if ($_SERVER['SERVER_PORT'] != "80") $serverURL .= ":".$_SERVER['SERVER_PORT'];
-<<<<<<< HEAD
 //for development purposes
-if (defined ('_GEOSERVICES_DEV_URL') && $serverURL == "http://localhost") $serverURL = _GEOSERVICES_DEV_URL;
-=======
->>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f
+if (defined('_GEOSERVICES_DEV_URL') && $serverURL == "http://localhost") $serverURL = _GEOSERVICES_DEV_URL;
 
 // get API parameters
 $taxon_id = getParameter("id", _DEFAULT_TAXON_ID);
