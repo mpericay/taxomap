@@ -1,6 +1,6 @@
 var UI = {
 
-    modalHelpWidth: 450,
+    modalHelpWidth: 580,
 	modalWidth: 600,
     active_taxon_id: null,
     active_taxon_level: null,
@@ -401,7 +401,7 @@ var UI = {
                 width: UI.modalHelpWidth
         });
 
-        $.get("sections/ajuda.html", function(data){
+		$.get("sections/ajuda." + locale + ".html", function(data){
             $("#divHelpModal").html(data);
         });
 

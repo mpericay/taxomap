@@ -15,7 +15,7 @@ var UI = {
 
         this.displaySlideBar();
 
-        this.createHelpDiv();
+        //this.createHelpDiv();
 
         this.createLegend();
 
@@ -367,23 +367,6 @@ var UI = {
         eGV.getMap().updateSize();
 
     },
-
-    createHelpDiv: function(){
-
-        $("#divHelpModal").dialog({
-                autoOpen: false,
-                modal: true,
-                draggable: false,
-                resizable: false,
-                title: locStrings._section_help,
-                width: UI.modalHelpWidth
-        });
-
-        $.get("sections/ajuda.html", function(data){
-            $("#divHelpModal").html(data);
-        });
-
-     },
 
     createSheetDiv: function(){
 
