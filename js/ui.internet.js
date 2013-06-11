@@ -1,6 +1,10 @@
 var UI = {
 
+<<<<<<< HEAD
     modalHelpWidth: 580,
+=======
+    modalHelpWidth: 450,
+>>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f
 	modalWidth: 600,
     active_taxon_id: null,
     active_taxon_level: null,
@@ -401,7 +405,11 @@ var UI = {
                 width: UI.modalHelpWidth
         });
 
+<<<<<<< HEAD
 		$.get("sections/ajuda." + locale + ".html", function(data){
+=======
+        $.get("sections/ajuda.html", function(data){
+>>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f
             $("#divHelpModal").html(data);
         });
 
