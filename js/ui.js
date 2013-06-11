@@ -15,11 +15,7 @@ var UI = {
 
         this.displaySlideBar();
 
-<<<<<<< HEAD
         //this.createHelpDiv();
-=======
-        this.createHelpDiv();
->>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f
 
         this.createLegend();
 
@@ -372,26 +368,6 @@ var UI = {
 
     },
 
-<<<<<<< HEAD
-=======
-    createHelpDiv: function(){
-
-        $("#divHelpModal").dialog({
-                autoOpen: false,
-                modal: true,
-                draggable: false,
-                resizable: false,
-                title: locStrings._section_help,
-                width: UI.modalHelpWidth
-        });
-
-        $.get("sections/ajuda.html", function(data){
-            $("#divHelpModal").html(data);
-        });
-
-     },
-
->>>>>>> 6ef9711c4c6532d9ea101897b102ad07e93bb22f
     createSheetDiv: function(){
 
         $("#divSheetModal").dialog({
