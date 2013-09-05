@@ -20,6 +20,7 @@ El Museu dóna suport a diversos portals que agreguen informació de biodiversit
     <h3>Desenvolupament de l'aplicació</h3>
     <p>versió 1.0: Geodata Sistemes S.L <a href="http://www.geodata.es" target="_blank" title="Anar a la web de Geodata">www.geodata.es</a><br/>
     versió 1.1 i posteriors: Martí Pericay</p>
+    <p>Taxo&amp;Map és un projecte de codi lliure. Tots els components (PostgreSQL/PostGIS, Mapserver, OpenLayers) i el propi aplicatiu (<a href="https://github.com/mpericay/taxomap" target="_blank">https://github.com/mpericay/taxomap</a>) són de codi obert.</p>
 	
 	<h3>Contacte amb relació al projecte</h3>
     <p>Francesc Uribe<br/>Museu de Ciències Naturals de Barcelona<br/>furibe@bcn.cat</p>

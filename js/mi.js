@@ -139,7 +139,7 @@ var MI = {
 		var boxes  = new OpenLayers.Layer.Boxes(this.highlightedGridName);
 		var bounds = OpenLayers.Bounds.fromArray(ext);
 		bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-		var box = new OpenLayers.Marker.Box(bounds,"#F00");
+		var box = new OpenLayers.Marker.Box(bounds,"#F00", 0.5);
 		boxes.addMarker(box);
 
 		this.hideHighlightedGrid();
