@@ -2,3 +2,5 @@ js/openlayers-2.12/
 js/viewer-3.0/
 php/conf.php
 php/geoservices/config/mcnb.ini
+php/geoservices/csv/
+php/geoservices/logs/

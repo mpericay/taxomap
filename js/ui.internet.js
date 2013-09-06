@@ -704,7 +704,7 @@ var UI = {
              div.find("#title").html(data.name);
              div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+data.name);
              div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+data.name);
-             div.find("#eol").attr("href", "http://eol.org/api/search/1.0/"+data.name);
+             div.find("#eol").attr("href", "http://www.eol.org/search?q="+data.name.replace(" ","+"));
          }
          if(data.subtitle) div.find("#subtitle").html(data.title);
          if(data.desc) div.find("#desc").html(data.desc);
@@ -716,7 +716,7 @@ var UI = {
          div.find("#title").html(title);
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
          div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
-         div.find("#eol").attr("href", "http://eol.org/api/search/1.0/"+title);
+         div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
      },
 
     drawInfoResults: function(div, childArray){
