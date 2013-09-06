@@ -336,6 +336,14 @@ select {
     padding: 10px;
 }
 
+#divSheetModal #content {
+    display: none;
+}
+
+#divSheetModal #loading {
+    display: block;
+}
+
 #divToolbar{
     display:inline;
 	width: 90px;

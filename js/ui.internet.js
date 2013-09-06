@@ -4,6 +4,7 @@ var UI = {
 	modalWidth: 600,
     active_taxon_id: null,
     active_taxon_level: null,
+    active_taxon_EOL_id: null,
     position_infobox: null,
     dialogHeight: 153,
     dialogWidth: 180,
@@ -70,7 +71,7 @@ var UI = {
 
         $("#buttonSheet").click(function() {
             $("#divSheetModal").dialog("open");
-            //UI.showSheet($("#divSheetModal"));
+            UI.showSheet($("#divSheetModal"));
         });
 
         $("#buttonQuotes").click(function() {
@@ -167,16 +168,29 @@ var UI = {
                 
                 $("#divBreadcrumb").html(UI.drawBreadcrumb(data,0, level));
 
-                // WHILE SHEET IS IN PROCESS --to be changed to UI.drawSheet
-                UI.drawSheetInProcess($("#divSheetModal"), active_taxon);
-
                 UI.active_taxon_id = taxon_id;
                 UI.active_taxon_level = level;
 
                 if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(UI.position_infobox);
 
-                // delete taxo search? no need
-                //$("#taxon").val("");
+                //start Id checking
+                //shouldn't be necessary: we should use EOL Id's
+                $.getJSON("http://eol.org/api/search/1.0.json?callback=?",
+                        {
+                          q: active_taxon,
+                          exact: true
+                        },
+                        function(data2){
+                            if(data2) {
+                                if(data2.results) {
+                                    UI.active_taxon_EOL_id = data2.results[0].id;
+                                    return;
+                                }
+                            }
+                            //if nothing found
+                            active_taxon_EOL_id = null;
+                 });
+                //end of Id checking
                 
             } else {
                 Menu.error();
@@ -416,7 +430,11 @@ var UI = {
                 resizable: true,
                 title: locStrings._section_sheet,
                 width: 770,
-                height: 400
+                height: 400,
+                close: function() {
+                    $("#divSheetModal #content").hide();
+                    $("#divSheetModal #loading").show();
+                }
         });
      },
 
@@ -657,14 +675,16 @@ var UI = {
 
      showSheet: function(div){
 
-        $.getJSON("php/geoservices/index.php?op=getsheet",
+         if(!UI.active_taxon_EOL_id) alert("error en recuperar l'identificador únic EOL");
+         var eol_url = "http://eol.org/api/pages/1.0/"+UI.active_taxon_EOL_id+".json?images=2&videos=1&sounds=0&maps=0&text=2&iucn=false&subjects=overview&licenses=all&details=true&common_names=true&synonyms=false&references=false&vetted=0&cache_ttl=";
+         $.getJSON(eol_url+"&callback=?", //for JSONP
             {
-            LEVEL: UI.active_taxon_level,
-            ID: UI.active_taxon_id
+                //additional paramns
+                //ID: UI.active_taxon_id
             },
             function(data){
             // parse JSON data
-                if(data) UI.drawSheet(div, data);
+                if(data) UI.drawEOLSheet(div, data);
                 else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
         });
 
@@ -699,24 +719,21 @@ var UI = {
 		
 	 },
 
-     drawSheet: function(div, data){
-         if(data.name) {
-             div.find("#title").html(data.name);
-             div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+data.name);
-             div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+data.name);
-             div.find("#eol").attr("href", "http://www.eol.org/search?q="+data.name.replace(" ","+"));
-         }
-         if(data.subtitle) div.find("#subtitle").html(data.title);
-         if(data.desc) div.find("#desc").html(data.desc);
-         if(data.photo) div.find("#photo").html(data.photo);
-         if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
-     },
+	 drawEOLSheet: function(div, data){
+	     $("#divSheetModal #content").show();
+	     $("#divSheetModal #loading").hide();
+	     var title = data.scientificName;
+	     div.find("#title").html(title);
 
-     drawSheetInProcess: function(div, title){
          div.find("#title").html(title);
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
          div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
          div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
+
+         if(data.subtitle) div.find("#subtitle").html(data.title);
+         if(data.desc) div.find("#desc").html(data.desc);
+         if(data.photo) div.find("#photo").html(data.photo);
+         if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
      },
 
     drawInfoResults: function(div, childArray){
