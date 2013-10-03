@@ -430,10 +430,11 @@ var UI = {
                 resizable: true,
                 title: locStrings._section_sheet,
                 width: 770,
-                height: 400,
+                height: 500,
                 close: function() {
                     $("#divSheetModal #content").hide();
                     $("#divSheetModal #loading").show();
+                    $("#divSheetModal #photo").attr("src", "img/load_small.gif");
                 }
         });
      },
@@ -675,18 +676,33 @@ var UI = {
 
      showSheet: function(div){
 
-         if(!UI.active_taxon_EOL_id) alert("error en recuperar l'identificador únic EOL");
-         var eol_url = "http://eol.org/api/pages/1.0/"+UI.active_taxon_EOL_id+".json?images=2&videos=1&sounds=0&maps=0&text=2&iucn=false&subjects=overview&licenses=all&details=true&common_names=true&synonyms=false&references=false&vetted=0&cache_ttl=";
-         $.getJSON(eol_url+"&callback=?", //for JSONP
-            {
-                //additional paramns
-                //ID: UI.active_taxon_id
-            },
-            function(data){
-            // parse JSON data
-                if(data) UI.drawEOLSheet(div, data);
-                else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
-        });
+         //HACK: sometimes taxon_id (requested via AJAX in another hack) is not set yet
+         //both hacks should be removed when we use EOL id's 
+         setTimeout(function() {
+             if(!UI.active_taxon_EOL_id) alert("error en recuperar l'identificador únic EOL");
+             var details = "true";
+             var vernacular = "true";
+             var synonyms = "false";
+             var references = "true";
+             var eol_url = "http://eol.org/api/pages/1.0/"+UI.active_taxon_EOL_id+".json?images=1&videos=1&sounds=0&maps=0&text=1&iucn=false&subjects=overview&licenses=all" +
+                 "&details=" + details +
+                 "&common_names=" + vernacular +
+                 "&synonyms=" + synonyms +
+                 "&references=" + references +
+                 "&vetted=0&cache_ttl=";
+             
+             $.getJSON(eol_url+"&callback=?", //for JSONP
+                {
+                    //additional paramns
+                    //ID: UI.active_taxon_id
+                },
+                function(data){
+                // parse JSON data
+                    if(data) UI.drawEOLSheet(div, data);
+                    else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
+            });}, 2000
+         );
+             
 
      },
 
@@ -725,15 +741,49 @@ var UI = {
 	     var title = data.scientificName;
 	     div.find("#title").html(title);
 
-         div.find("#title").html(title);
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
          div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
-         div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
+         if(UI.active_taxon_EOL_id) div.find("#eol").attr("href", "http://www.eol.org/pages/"+UI.active_taxon_EOL_id);
+         else div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
 
-         if(data.subtitle) div.find("#subtitle").html(data.title);
-         if(data.desc) div.find("#desc").html(data.desc);
-         if(data.photo) div.find("#photo").html(data.photo);
-         if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
+         if(data.vernacularNames) UI.drawEOLVernacular(div, data.vernacularNames);
+         $.each(data.dataObjects, function(index, value) {
+             UI.drawEOLObject(div, value);
+         });
+         //if(data.dataObjects[0].description) div.find("#desc").html(data.dataObjects[0].description);
+         //if(data.photo) div.find("#photo").html(data.photo);
+         //if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
+     },
+     
+     drawEOLObject: function(div, obj){
+         var type = obj.dataType;
+         switch(type) {
+             case "http://purl.org/dc/dcmitype/Text":
+                 div.find("#desc").html(obj.description);
+                 break;
+             case "http://purl.org/dc/dcmitype/StillImage":
+                 div.find("#photo").attr("src", obj.eolMediaURL); //or eolThumbnailURL?
+                 var title = "";
+                 title += (obj.title != undefined) ? obj.title : "";
+                 title += (obj.rightsHolder != undefined) ? (" (" + obj.rightsHolder + ")") : "";
+                 title += (obj.location != undefined) ? (". Fotografia feta a " + obj.location) : "";
+                 div.find("#photoTitle").html(title);
+                 break; 
+             default:
+                 break;
+         }
+     },
+     
+     drawEOLVernacular: function(div, namesArray){
+         var names = "";
+         $.each(namesArray, function(index, value) {
+             if(index < 30) {
+                 names += names ? ", " : "";
+                 names += value.vernacularName + " <i>(" + value.language + ")</i>";
+             }
+         });
+         if(namesArray.length >= 30) names += "... i fins a "+namesArray.length+" sinònims més";
+         div.find("#subtitle").html(names);
      },
 
     drawInfoResults: function(div, childArray){

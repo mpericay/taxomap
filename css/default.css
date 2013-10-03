@@ -296,8 +296,7 @@ select {
 
 #divSheetModal #textColumn {
     float: left;
-    /* WHILE SHEET IS IN PROCESS */
-    /*width: 60%;*/
+    width: 60%;
 }
 
 #divSheetModal #title {
@@ -324,11 +323,18 @@ select {
     color: #888;
 }
 
+
+#divSheetModal #photo {
+    max-width: 240px;
+    margin-right: 10px;
+}
+
 #divSheetModal #links {
     padding: 10px;
     color: #57b4df;
     font-weight:bold;
     border-top:1px solid #e5e5e5;
+    clear: both;
 }
 
 #divSheetModal #links img {
