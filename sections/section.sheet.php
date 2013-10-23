@@ -12,6 +12,9 @@
 	        <img id="photo" alt="Image of the taxo" src="img/load_small.gif" />
 	        <div id="photoTitle">&copy; Museu de Ciències Naturals de Barcelona, autor: Robert Capa, 1982 </div>
 	    </div>
+        <div id="swfvideo">
+            <embed src="" height="300" width="430"> 
+        </div>		    
         <div id="links">
             <div id="bottomTitle">Més informació:</div>
             <a id="wikispecies" target="_blank"><img alt="Wikispecies Logo" title="Consultar Wikispecies" src="img/logos/wikispecies.png" /></a>

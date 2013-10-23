@@ -122,6 +122,7 @@ var UI = {
         // set visible and hidden layers basing on level
         var levels = new Array("kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
         var conn = map.getConnection("bioexplora");
+        //GBIF LAYER TEST: uncomment this! Marti
         for (var i=0; i<levels.length; i++){
             var layer = conn.getLayerByName(levels[i]);
             // non-existant layers (animalia) are ignored
@@ -435,6 +436,7 @@ var UI = {
                     $("#divSheetModal #content").hide();
                     $("#divSheetModal #loading").show();
                     $("#divSheetModal #photo").attr("src", "img/load_small.gif");
+                    $("#divSheetModal #swfvideo").hide();
                 }
         });
      },
@@ -762,13 +764,24 @@ var UI = {
                  div.find("#desc").html(obj.description);
                  break;
              case "http://purl.org/dc/dcmitype/StillImage":
+                 if(!obj.eolMediaURL) break;
                  div.find("#photo").attr("src", obj.eolMediaURL); //or eolThumbnailURL?
                  var title = "";
                  title += (obj.title != undefined) ? obj.title : "";
                  title += (obj.rightsHolder != undefined) ? (" (" + obj.rightsHolder + ")") : "";
                  title += (obj.location != undefined) ? (". Fotografia feta a " + obj.location) : "";
                  div.find("#photoTitle").html(title);
-                 break; 
+                 break;
+             case "http://purl.org/dc/dcmitype/MovingImage":
+                 var video = obj.eolMediaURL;
+                 if(!video) video = obj.mediaURL;
+                 if(!video) {
+                     $("#divSheetModal #swfvideo").hide();
+                 } else {
+                     div.find("#swfvideo > embed").attr("src", video);
+                     $("#divSheetModal #swfvideo").show();
+                 }
+                 break;                 
              default:
                  break;
          }

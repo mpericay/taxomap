@@ -329,6 +329,11 @@ select {
     margin-right: 10px;
 }
 
+#divSheetModal #swfvideo {
+    display: none;
+    padding: 20px 0px:
+}
+
 #divSheetModal #links {
     padding: 10px;
     color: #57b4df;

@@ -45,30 +45,41 @@ function initialize(){
 
 	var baseMapQuest = new OpenLayers.Layer.OSM("MapQuest-OSM Tiles", arrayMapQuest, zoomOptions);
 	var baseAerial = new OpenLayers.Layer.OSM("MapQuest Open Aerial Tiles", arrayAerial, zoomOptions);
+	//var gbifLayer = new OpenLayers.Layer.OSM("GBIF Mammalia Tiles", ["http://api.gbif.org/v0.9/map/density/tile?x=${x}&y=${y}&z=${z}&type=PUBLISHER&key=e8eada63-4a33-44aa-b2fd-4f71efb222a0&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds&resolution=8"], zoomOptions);
 	
     var egvConnOSM = [
 
-    egvConnOSM1 = new eGV.Connection(
-        "OSM - Aerial",
-        baseAerial,
-            {
-            "id":"OSMAerial",
-            "title":locStrings._satellite,
-			"visible": true		
-        }
-        ),
-	
-	egvConnOSM2 = new eGV.Connection(
-        "OSM Map",
-        baseMapQuest,
-            {
-            "id":"OSMMap",
-            "title":locStrings._map,
-			"visible": false
-        }
-        )
+        egvConnOSM1 = new eGV.Connection(
+            "OSM - Aerial",
+            baseAerial,
+                {
+                "id":"OSMAerial",
+                "title":locStrings._satellite,
+    			"visible": true		
+            }
+            ),
+    	
+    	egvConnOSM2 = new eGV.Connection(
+            "OSM Map",
+            baseMapQuest,
+                {
+                "id":"OSMMap",
+                "title":locStrings._map,
+    			"visible": false
+            }
+            )/*,
+            //GBIF LAYER TEST: delete this!
+            egvConnGBIF = new eGV.Connection(
+                    "GBIF-Mammalia",
+                    gbifLayer,
+                        {
+                        "id":"GBIFLayer",
+                        "title":"GBIFLayer",
+                        "visible": true,
+                        "isBaseLayer": false
+                    }
+                )*/            
     ];
-
 
     map.addConnections(egvConnOSM);
 
