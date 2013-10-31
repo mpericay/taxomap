@@ -4,7 +4,7 @@ var UI = {
 	modalWidth: 600,
     active_taxon_id: null,
     active_taxon_level: null,
-    active_taxon_EOL_id: null,
+    active_taxon_name: null,
     position_infobox: null,
     dialogHeight: 153,
     dialogWidth: 180,
@@ -171,27 +171,9 @@ var UI = {
 
                 UI.active_taxon_id = taxon_id;
                 UI.active_taxon_level = level;
+                UI.active_taxon_name = active_taxon;
 
                 if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(UI.position_infobox);
-
-                //start Id checking
-                //shouldn't be necessary: we should use EOL Id's
-                $.getJSON("http://eol.org/api/search/1.0.json?callback=?",
-                        {
-                          q: active_taxon,
-                          exact: true
-                        },
-                        function(data2){
-                            if(data2) {
-                                if(data2.results) {
-                                    UI.active_taxon_EOL_id = data2.results[0].id;
-                                    return;
-                                }
-                            }
-                            //if nothing found
-                            active_taxon_EOL_id = null;
-                 });
-                //end of Id checking
                 
             } else {
                 Menu.error();
@@ -678,32 +660,18 @@ var UI = {
 
      showSheet: function(div){
 
-         //HACK: sometimes taxon_id (requested via AJAX in another hack) is not set yet
-         //both hacks should be removed when we use EOL id's 
-         setTimeout(function() {
-             if(!UI.active_taxon_EOL_id) alert("error en recuperar l'identificador únic EOL");
-             var details = "true";
-             var vernacular = "true";
-             var synonyms = "false";
-             var references = "true";
-             var eol_url = "http://eol.org/api/pages/1.0/"+UI.active_taxon_EOL_id+".json?images=1&videos=1&sounds=0&maps=0&text=1&iucn=false&subjects=overview&licenses=all" +
-                 "&details=" + details +
-                 "&common_names=" + vernacular +
-                 "&synonyms=" + synonyms +
-                 "&references=" + references +
-                 "&vetted=0&cache_ttl=";
+         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
              
-             $.getJSON(eol_url+"&callback=?", //for JSONP
-                {
-                    //additional paramns
-                    //ID: UI.active_taxon_id
-                },
-                function(data){
-                // parse JSON data
-                    if(data) UI.drawEOLSheet(div, data);
-                    else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
-            });}, 2000
-         );
+         $.getJSON(wiki_url+"&callback=?", //for JSONP
+            {
+                //additional params
+                //ID: UI.active_taxon_id
+            },
+            function(data){
+            // parse JSON data
+                if(data) UI.drawWikiSheet(div, data);
+                else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
+        });
              
 
      },
@@ -736,27 +704,26 @@ var UI = {
 		$("#divHeaderLinks").html(data);
 		
 	 },
+	 
+	 drawWikiSheet: function(div, data){
+         $("#divSheetModal #content").show();
+         $("#divSheetModal #loading").hide();
 
-	 drawEOLSheet: function(div, data){
-	     $("#divSheetModal #content").show();
-	     $("#divSheetModal #loading").hide();
-	     var title = data.scientificName;
-	     div.find("#title").html(title);
+         var title = data.parse.title;
+         div.find("#title").html(title);
 
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
          div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
          if(UI.active_taxon_EOL_id) div.find("#eol").attr("href", "http://www.eol.org/pages/"+UI.active_taxon_EOL_id);
          else div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
 
-         if(data.vernacularNames) UI.drawEOLVernacular(div, data.vernacularNames);
-         $.each(data.dataObjects, function(index, value) {
-             UI.drawEOLObject(div, value);
-         });
+         //if(data.vernacularNames) UI.drawEOLVernacular(div, data.vernacularNames);
+         div.find("#desc").html(data.parse.text["*"]);
          //if(data.dataObjects[0].description) div.find("#desc").html(data.dataObjects[0].description);
          //if(data.photo) div.find("#photo").html(data.photo);
          //if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
      },
-     
+
      drawEOLObject: function(div, obj){
          var type = obj.dataType;
          switch(type) {

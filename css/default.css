@@ -295,8 +295,8 @@ select {
 }
 
 #divSheetModal #textColumn {
-    float: left;
-    width: 60%;
+    /*float: left;
+    width: 60%;*/
 }
 
 #divSheetModal #title {
