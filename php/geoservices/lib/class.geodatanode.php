@@ -7,6 +7,7 @@ require_once("../conf.php");
 class geodatanode {
 
     public $ready = false;
+    public $maxlevel = 7;
     private $profile = false;
     private $mode = false;
     private $format = false;
@@ -350,8 +351,6 @@ class geodatanode {
 
     private function getAllChildren($parent_id = false, $level = 1, $maxlevel = false) {
 
-        if($level-1 == 6) return false;
-
         // we assume we loaded the table info
         if(!$this->levels) $this->levels = $this->getLevels();
         $tables = $this->levels;
@@ -388,7 +387,7 @@ class geodatanode {
         if($this->levels[$level]['parent_level_id']) $sql .= $this->levels[$level]['parent_level_id']." AS parent,";
         $sql .= "id, ".$this->levels[$level]['level_name']." AS name FROM ".$this->levels[$level]['table_name']." WHERE ".$this->levels[$level]['level_id']."='".$parent_id."'";
         $lastchild = $this->executeSQL($sql,true);
-        if(!$lastchild) $resultchild = array("id"=> "Animalia", "name"=>"Animalia", "children"=>array($child));
+        if(!$lastchild) $resultchild = $this->getGod(array($child));
         else $resultchild = array("id"=> $lastchild[0]['id'], "name"=>$lastchild[0]['id'], "parent" => $lastchild[0]['parent'], "children"=>array($child));
 
         return $resultchild;
@@ -407,6 +406,8 @@ class geodatanode {
 
         // add children?
         if($getchildren) $children = $this->getAllChildren($id, $level+1, $level+1);
+        
+        if(!$level) return $this->getGod($children);
 
         $sql = "SELECT ";
         if($this->levels[$level]['parent_level_id']) $sql .= $this->levels[$level]['parent_level_id']." AS parent,";
@@ -428,7 +429,14 @@ class geodatanode {
         return $result;
 
     }
+    
+    public function getGod($children) {
 
+        $god = $this->executeSQL("SELECT domain_id FROM kingdom",true);
+    	$result = array("id"=> $god[0]["domain_id"], "name"=>$god[0]["domain_id"], "children"=>$children);
+        return $result;
+
+    }    
 
     public function getGridSelection($bbox, $grid_suffix) {
 
@@ -461,7 +469,7 @@ class geodatanode {
             ST_XMax(ST_Extent(the_geom)) AS maxx,
             ST_YMin(ST_Extent(the_geom)) AS miny,
             ST_YMax(ST_Extent(the_geom)) AS maxy		
-		FROM ".$grid_table." WHERE gid IN (".$gridlist.")";
+			FROM ".$grid_table." WHERE gid IN (".$gridlist.")";
 		$gridextent = $this->executeSQL($sql,true);
 		
 		return $gridextent[0];
@@ -488,18 +496,21 @@ class geodatanode {
         
         // get parent count (we could get it from sum of children totals on recordset but not for specie (has no children)
         $sql = "SELECT MAX(g.id) AS id";
-        if($level == 6) $sql .= ", MAX(l.scientific_name) AS name";
+        if($level == $this->maxlevel) $sql .= ", MAX(l.scientific_name) AS name";
         else $sql .= ", MAX(g.id) AS name";
         $sql .= ", SUM(g.ct) AS value";
         $sql .= " FROM v_".$this->levels[$level]['table_name']."_grid";
         //add grid suffix if needed (for querying grid_detail
         if($grid) $sql .= "_".$grid;
         $sql .= " g ";
-        // we need an extra join for the name to get level 6 (level 5 children) name
-        if($level == 6) $sql .= " INNER JOIN ".$this->levels[$level]['table_name']." l ON g.id = l.".$this->levels[$level]['level_id'];
-        $sql .= " WHERE g.".$this->levels[$level]['level_id']." ='".$id."'";
-        if($gridlist) $sql .= " AND g.gid IN (".$gridlist.")";
+        // we need an extra join for the name to get level 7 (level 6 children) name
+        if($level == $this->maxlevel) $sql .= " INNER JOIN ".$this->levels[$level]['table_name']." l ON g.id = l.".$this->levels[$level]['level_id'];
+        if($gridlist) $sql .= " WHERE g.gid IN (".$gridlist.")";
+        if($level != 0) {
+        	$sql .= " AND g.".$this->levels[$level]['level_id']." ='".$id."'";
+        }
         $sql .= " GROUP BY g.".$this->levels[$level]['level_id'];
+
         $parent = $this->executeSQL($sql,true);
 
         // if there are children levels (not last level) and parent got results
@@ -507,8 +518,8 @@ class geodatanode {
 
             //$sql = "SELECT MAX(g.".$this->levels[$level+2]['parent_level_id'].") AS id, MAX(g.".$this->levels[$level+2]['parent_level_id'].") AS name, SUM(g.ct) AS value";
             $sql = "SELECT MAX(g.id) AS id";
-            // we need an extra join for the name to get level 6 (level 5 children) name
-            if($level == 5) $sql .= ", MAX(l.scientific_name) AS name";
+            // we need an extra join for the name to get level 7 (level 6 children) name
+            if($level == $this->maxlevel-1) $sql .= ", MAX(l.scientific_name) AS name";
             else $sql .= ", MAX(g.id) AS name";
 
             $sql.= ", SUM(g.ct) AS value";
@@ -518,34 +529,16 @@ class geodatanode {
             $sql .= " g ";
             //join parent table
             $sql .= " INNER JOIN ".$this->levels[$level+1]['table_name']." t ON g.id = t.".$this->levels[$level+1]['level_id'];
-            // we need an extra join for the name to get level 6 (level 5 children) name
-            if($level == 5) $sql .= " INNER JOIN ".$this->levels[$level+1]['table_name']." l ON g.id = l.".$this->levels[$level]['level_id'];
+            // we need an extra join for the name to get level 7 (level 6 children) name
+            if($level == $this->maxlevel-1) $sql .= " INNER JOIN ".$this->levels[$level+1]['table_name']." l ON g.id = l.".$this->levels[$level]['level_id'];
 
             $sql .= " WHERE t.".$this->levels[$level+1]['parent_level_id']." ='".$id."'";
             if($gridlist) $sql .= " AND g.gid IN (".$gridlist.")";
             $sql .= " GROUP BY t.".$this->levels[$level+1]['level_id']." ORDER BY value DESC";
-            //
-            //die($sql);
+
             $children = $this->executeSQL($sql,true);
          // end if children
          }
-
-        // get parent count (we could get it from sum of children totals on recordset but not for specie (has no children)
-        $sql = "SELECT MAX(g.id) AS id";
-        if($level == 6) $sql .= ", MAX(l.scientific_name) AS name";
-        else $sql .= ", MAX(g.id) AS name";
-        $sql .= ", SUM(g.ct) AS value";
-        $sql .= " FROM v_".$this->levels[$level]['table_name']."_grid";
-        //add grid suffix if needed (for querying grid_detail
-        if($grid) $sql .= "_".$grid;
-        $sql .= " g ";
-        // we need an extra join for the name to get level 6 (level 5 children) name
-        if($level == 6) $sql .= " INNER JOIN ".$this->levels[$level]['table_name']." l ON g.id = l.".$this->levels[$level]['level_id'];
-        $sql .= " WHERE g.".$this->levels[$level]['level_id']." ='".$id."'";
-        if($bbox) $sql .= " AND g.gid IN (".$gridlist.")";
-        $sql .= " GROUP BY g.".$this->levels[$level]['level_id'];
-        //die($sql);
-        $parent = $this->executeSQL($sql,true);
 
 /*
         for($i=0; $i<count($children); $i++) {
@@ -585,7 +578,7 @@ class geodatanode {
             $currentlevel = $this->executeSQL($sql,true);
             $result = array("id"=> $currentlevel[0]['id'], "name"=>$currentlevel[0]['id'], "level"=>$level, "children"=> $children);
         } else {
-            $result = array("id"=> "animalia", "name"=>"Animalia", "level"=>0, "children"=> $children);
+            $result = $this->getGod($children);
         }
 
         return $result;
@@ -686,7 +679,7 @@ class geodatanode {
 
         // Get list of species, to search in quote table, looking view v_specie_tree
         $sql = "SELECT id FROM v_specie_tree ";
-        if ($level == 6) $sql.= "WHERE ".$this->levels[$level]['level_id']." = ".$id;
+        if ($level == $this->maxlevel) $sql.= "WHERE ".$this->levels[$level]['level_id']." = ".$id;
         else if($level) $sql.= "WHERE ".$this->levels[$level+1]['parent_level_id']." = '".$id."'";
         $species = $this->executeSQL($sql,true);
 
@@ -834,8 +827,8 @@ class geodatanode {
 			  if($desc) $desc .= $quotes[$i]['country'] ? ' (' . $quotes[$i]['country'] . ')' : '';
 			  
 			  $kml[] = ' <Placemark id="' . $quotes[$i]['id'] . '">';
-			  $kml[] = ' <name>' . $quotes[$i]['scientific_name'] . '</name>';
-			  if($desc) $kml[] = ' <description>' . $desc .  '</description>';
+			  $kml[] = ' <name>' . htmlspecialchars($quotes[$i]['scientific_name']) . '</name>';
+			  if($desc) $kml[] = ' <description>' . htmlspecialchars($desc) .  '</description>';
 			  //$kml[] = ' <styleUrl>#' . ($row['type']) .'Style</styleUrl>';
 			  $kml[] = ' <styleUrl>#greenStyle</styleUrl>';
 			  $kml[] = ' <Point>';

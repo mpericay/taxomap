@@ -8,7 +8,7 @@ var UI = {
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    maxLevel: 6,
+    maxLevel: 7,
 
     initialize: function(){
 
@@ -111,7 +111,7 @@ var UI = {
 
     },
 
-    setTaxon: function(taxon_id, level){
+    setTaxon: function(taxon_id, level){ 
         // make sure that taxon is changing
         if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
 
@@ -119,7 +119,7 @@ var UI = {
         if(map == null) return;
 
         // set visible and hidden layers basing on level
-        var levels = new Array("kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
+        var levels = new Array("domain", "kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
         var conn = map.getConnection("bioexplora");
         for (var i=0; i<levels.length; i++){
             var layer = conn.getLayerByName(levels[i]);

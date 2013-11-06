@@ -93,6 +93,7 @@ select {
     top: 60px;
     left: 240px;
     font-size:13px;
+    width: 70%;
 }
 
 #divHeaderLinks {
