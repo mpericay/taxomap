@@ -225,6 +225,24 @@ function initialize(){
         "visible" : false,
         "queryable" : true,
         "showLegend" : false
+    }),
+    egvLayerLife = new eGV.Layer({
+        "id" : "domain",
+        "name" : "domain",
+        "title" : "Eukaryota",
+        "minScale": scale_change,
+        "visible" : false,
+        "queryable" : true,
+        "showLegend" : false
+    }),
+    egvLayerLifeDetail = new eGV.Layer({
+        "id" : "domain_detail",
+        "name" : "domain_detail",
+        "title" : "Eukaryota detall",
+        "maxScale": scale_change,
+        "visible" : false,
+        "queryable" : true,
+        "showLegend" : false
     })
     ];
     egvConn1.map = map;

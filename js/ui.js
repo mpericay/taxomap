@@ -97,7 +97,7 @@ var UI = {
         if(map == null) return;
 
         // set visible and hidden layers basing on level
-        var levels = new Array("kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
+        var levels = new Array("domain","kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
         var conn = map.getConnection("bioexplora");
         for (var i=0; i<levels.length; i++){
             var layer = conn.getLayerByName(levels[i]);

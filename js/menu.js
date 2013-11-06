@@ -53,9 +53,10 @@ var Menu = {
         return data;
     },
     drawParent: function(parent, level) {
-        var parent_id = (level) ? parent.id : "Animalia";
+        
+        //var parent_id = (level) ? parent.id : "Vida";
         var data = "<li class='menuBack'>";
-        data += "<a href=\"javascript:UI.setTaxon('"+parent_id+"',"+(level-1)+")\" title=\""+locStrings._generic_activate+" "+parent.name+"\">";
+        data += "<a href=\"javascript:UI.setTaxon('"+parent.id+"',"+(level-1)+")\" title=\""+locStrings._generic_activate+" "+parent.name+"\">";
         data += "<span class=\"ui-menu-icon ui-icon ui-icon-carat-1-w\"></span> "+ locStrings._taxon_parent;
         data+= "</a>";
         data += "</li>";
