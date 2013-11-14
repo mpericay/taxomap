@@ -46,7 +46,7 @@ define("_GENERIC_DOWNLOAD","Descargar");
 define("_GENERIC_SCALE","Escala");
 define("_GENERIC_INFORMATION","Informaci&oacute;n");
 define("_GENERIC_TITLE","Taxo&Map: colecciones del Museo de Ciencias Naturales de Barcelona");
-define("_GENERIC_SUBTITLE","Servidor de mapas");
+define("_GENERIC_MOREINFO","más información");
 define("_INDEX_META_KEYWORDS","taxo&map, taxón, colecciones, mapa, mapas, especies, servidor de mapas, Museo de Ciencias Naturales de Barcelona, MCNB");
 define("_INDEX_META_DESCRIPTION","Servidor de mapas WMS del MCNB");
 define("_LOADING_APPLICATION","Cargando aplicaci&oacute;n");
@@ -54,6 +54,7 @@ define("_PLEASE_WAIT","Por favor, espere");
 define("_ERROR_MSG", "Se ha producido un error");
 define("_ERROR_BACK", "Volver al inicio");
 define("_NO_RESULTS_FOUND", "No se ha encontrado");
+define("_AT_WIKIPEDIA", "en la Wikipedia");
 
 //************************************************************************
 //
@@ -77,7 +78,7 @@ define("_SECTION_INFODIALOG", "Registros encontrados");
 
 define("_BACK_HOME", "Volver al inicio");
 define("_TAXON_SEARCH", "Buscar taxón");
-define("_SEE_SHEET", "Ver ficha");
+define("_SEE_SHEET", "ver descripción");
 define("_SEE_SHEET_TITLE", "Ver la ficha descriptiva del taxón seleccionado");
 define("_DOWNLOAD_QUOTES", "Todos los registros");
 define("_DOWNLOAD_ALL_TITLE", "Descargar todos los registros del taxón en formato CSV");
@@ -115,5 +116,13 @@ define("_AREA_TEXT","Cálculo de áreas: clicar sobre el mapa en los puntos de m
 define("_PRINT_TEXT","Imprimir: clicar generar PDF en información para obtener el PDF del mapa");
 define("_HELP_TEXT","Abre la video-ayuda");
 define("_TRANSPARENCY_TEXT","Opacidad");
+
+//************************************************************************
+//
+// Sheet
+//
+//************************************************************************
+define("_SHEET_LOADING", "Cargando información desde Wikipedia ...");
+define("_SHEET_SUBTITLE", "Información extraída de Wikipedia. Ver el artículo completo");
 
 ?>

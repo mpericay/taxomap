@@ -46,7 +46,7 @@ define("_GENERIC_DOWNLOAD","Descarregar");
 define("_GENERIC_SCALE","Escala");
 define("_GENERIC_INFORMATION","Informaci&oacute;");
 define("_GENERIC_TITLE","Taxo&Map: col·leccions del Museu de Ciències Naturals de Barcelona");
-define("_GENERIC_SUBTITLE","Servidor de mapes");
+define("_GENERIC_MOREINFO","més informació");
 define("_INDEX_META_KEYWORDS","taxo&map, tàxon, col·leccions, mapa, mapes, mapas, espècies, servidor de mapas, Museu de Ciències Naturals de Barcelona, MCNB");
 define("_INDEX_META_DESCRIPTION","Servidor de mapes WMS del MCNB");
 define("_LOADING_APPLICATION","Carregant aplicaci&oacute;");
@@ -54,6 +54,7 @@ define("_PLEASE_WAIT","Si us plau, esperi uns segons");
 define("_ERROR_MSG", "S'ha produit un error");
 define("_ERROR_BACK", "Tornar a l'inici");
 define("_NO_RESULTS_FOUND", "No s'ha trobat");
+define("_AT_WIKIPEDIA", "a la Wikipedia");
 
 //************************************************************************
 //
@@ -77,8 +78,8 @@ define("_SECTION_INFODIALOG", "Registres trobats");
 
 define("_BACK_HOME", "Tornar a l'inici");
 define("_TAXON_SEARCH", "Cercar tàxon");
-define("_SEE_SHEET", "Veure fitxa");
-define("_SEE_SHEET_TITLE", "Veure la fitxa descriptiva del tàxon seleccionat");
+define("_SEE_SHEET", "veure descripció");
+define("_SEE_SHEET_TITLE", "Veure la fitxa descriptiva del tàxon");
 define("_DOWNLOAD_QUOTES", "Tots els registres");
 define("_DOWNLOAD_ALL_TITLE", "Descarregar tots els registres del tàxon en format CSV");
 define("_DOWNLOAD_SELECTED_TITLE", "Descarregar registres trobats en format CSV");
@@ -115,5 +116,13 @@ define("_AREA_TEXT","Càlcul d'àrees: clicar sobre el mapa els punts de mesura.
 define("_PRINT_TEXT","Imprimir: clicar generar pdf a informació per obtenir el pdf del mapa");
 define("_HELP_TEXT","Mostra la video-ajuda");
 define("_TRANSPARENCY_TEXT","Opacitat");
+
+//************************************************************************
+//
+// Sheet
+//
+//************************************************************************
+define("_SHEET_LOADING", "Carregant informació des de Wikipedia ...");
+define("_SHEET_SUBTITLE", "Informació extreta de Wikipedia. Vegeu l'article complet");
 
 ?>

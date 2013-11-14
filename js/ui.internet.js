@@ -31,9 +31,6 @@ var UI = {
 		
 		this.createAboutDiv();
 
-        // create searchmap
-        //this.createCountrySearch();
-
         // create taxo search
         this.createTaxoSearch();
 
@@ -69,10 +66,9 @@ var UI = {
             UI.showModal("About");
         });		
 
-        $("#buttonSheet").click(function() {
-            $("#divSheetModal").dialog("open");
+        /*$("#buttonSheet").click(function() {
             UI.showSheet($("#divSheetModal"));
-        });
+        });*/
 
         $("#buttonQuotes").click(function() {
             MI.getQuotes();
@@ -412,13 +408,11 @@ var UI = {
                 draggable: true,
                 resizable: true,
                 title: locStrings._section_sheet,
-                width: 770,
+                width: 850,
                 height: 500,
                 close: function() {
                     $("#divSheetModal #content").hide();
                     $("#divSheetModal #loading").show();
-                    $("#divSheetModal #photo").attr("src", "img/load_small.gif");
-                    $("#divSheetModal #swfvideo").hide();
                 }
         });
      },
@@ -479,43 +473,8 @@ var UI = {
 
       },
 
-    createCountrySearch: function(){
-		$( "#country" ).autocomplete({
-                        delay: 300,
-			source: "php/geoservices/index.php?op=searchcountry",
-			minLength: 2,
-			select: function( event, ui ) {
-                                // no results found
-                                if(!ui.item.id) {
-                                    // we prevent the value to be displayed on input
-                                    event.preventDefault();
-                                    return;
-                                }
-				if(ui.item) {
-                                    MI.bringExtent2Center(ui.item.minx, ui.item.miny, ui.item.maxx, ui.item.maxy);
-                                }
-                                else alert("Nothing selected, input was " + this.value);
-
-                                // added
-                                //$( "#country" ).removeClass( "ui-autocomplete-loading" );
-			},
-			open: function() {
-				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-			},
-			close: function() {
-				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-			}
-		});
-      },
-
       createButtons: function(){
             $("button").button(); // every button is a jquery button widget
-			
-			$("#divButtonQuotes").position({
-				my: "left top",
-				at: "right top",
-				of: $("#buttonSheet")
-			});
 	  
 			// top dropdown menu
 			this.buildDropdownMenu("buttonQuotes");
@@ -660,7 +619,13 @@ var UI = {
 
      showSheet: function(div){
 
-         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
+         if(!div) var div = $("#divSheetModal");
+         
+         div.dialog("open");
+         div.dialog("option", "title", UI.active_taxon_name);
+         
+         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
+         //var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=query&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
              
          $.getJSON(wiki_url+"&callback=?", //for JSONP
             {
@@ -669,8 +634,15 @@ var UI = {
             },
             function(data){
             // parse JSON data
-                if(data) UI.drawWikiSheet(div, data);
-                else div.html(locStrings._no_results_found +" "+UI.active_taxon_id);
+                if(data.parse) UI.drawWikiSheet(div, data);
+                else {
+                    div.find("#title").html(locStrings._no_results_found);
+                    div.find("#desc").html(locStrings._no_results_found +" "+UI.active_taxon_name+ " " + locStrings._at_wikipedia);
+                    div.find("#subtitle").hide();
+                }
+                div.find("#content").show();
+                div.find("#loading").hide();
+                UI.drawLinksSheet(div, UI.active_taxon_name);
         });
              
 
@@ -706,64 +678,35 @@ var UI = {
 	 },
 	 
 	 drawWikiSheet: function(div, data){
-         $("#divSheetModal #content").show();
-         $("#divSheetModal #loading").hide();
-
+	     
          var title = data.parse.title;
          div.find("#title").html(title);
+         
+         div.find("#subtitle").html(locStrings._sheet_subtitle + " <a href='http://" + locale + ".wikipedia.org/wiki/" + title + "' target='_blank'>"+locStrings._generic_here+"</a>").show();
 
-         div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
-         div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
-         if(UI.active_taxon_EOL_id) div.find("#eol").attr("href", "http://www.eol.org/pages/"+UI.active_taxon_EOL_id);
-         else div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
-
-         //if(data.vernacularNames) UI.drawEOLVernacular(div, data.vernacularNames);
+         // get raw HTML text ... but we need to do a few hacks
          div.find("#desc").html(data.parse.text["*"]);
-         //if(data.dataObjects[0].description) div.find("#desc").html(data.dataObjects[0].description);
-         //if(data.photo) div.find("#photo").html(data.photo);
-         //if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
-     },
+         
+         //HACKS
+         //remove links
+         $('#desc a').replaceWith(function() {
+             return this.childNodes;
+         });
+         //remove areas (with links)
+         $('#desc area').remove();         
+         //remove references
+         $('#desc .reference ').remove();
+         //remove references errors
+         $('#desc .mw-ext-cite-error').remove();
+         //remove disambiguations 
+         //$('#desc .dablink').remove();
 
-     drawEOLObject: function(div, obj){
-         var type = obj.dataType;
-         switch(type) {
-             case "http://purl.org/dc/dcmitype/Text":
-                 div.find("#desc").html(obj.description);
-                 break;
-             case "http://purl.org/dc/dcmitype/StillImage":
-                 if(!obj.eolMediaURL) break;
-                 div.find("#photo").attr("src", obj.eolMediaURL); //or eolThumbnailURL?
-                 var title = "";
-                 title += (obj.title != undefined) ? obj.title : "";
-                 title += (obj.rightsHolder != undefined) ? (" (" + obj.rightsHolder + ")") : "";
-                 title += (obj.location != undefined) ? (". Fotografia feta a " + obj.location) : "";
-                 div.find("#photoTitle").html(title);
-                 break;
-             case "http://purl.org/dc/dcmitype/MovingImage":
-                 var video = obj.eolMediaURL;
-                 if(!video) video = obj.mediaURL;
-                 if(!video) {
-                     $("#divSheetModal #swfvideo").hide();
-                 } else {
-                     div.find("#swfvideo > embed").attr("src", video);
-                     $("#divSheetModal #swfvideo").show();
-                 }
-                 break;                 
-             default:
-                 break;
-         }
      },
      
-     drawEOLVernacular: function(div, namesArray){
-         var names = "";
-         $.each(namesArray, function(index, value) {
-             if(index < 30) {
-                 names += names ? ", " : "";
-                 names += value.vernacularName + " <i>(" + value.language + ")</i>";
-             }
-         });
-         if(namesArray.length >= 30) names += "... i fins a "+namesArray.length+" sinònims més";
-         div.find("#subtitle").html(names);
+     drawLinksSheet: function(div, title){
+         div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
+         div.find("#gbif").attr("href", "http://www.gbif.org/species/search?q="+title);
+         div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
      },
 
     drawInfoResults: function(div, childArray){

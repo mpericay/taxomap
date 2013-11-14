@@ -14,7 +14,7 @@
     </div>
 
     <div id="divTopCenter">	
-        <button id="buttonSheet" title="<?php echo _SEE_SHEET_TITLE; ?>"><?php echo _SEE_SHEET; ?></button>
+        <!-- <button id="buttonSheet" title="<?php echo _SEE_SHEET_TITLE; ?>"><?php echo _SEE_SHEET; ?></button>-->
         <!--<button id="buttonQuotes" title="<?php echo _DOWNLOAD_ALL_TITLE; ?>"><?php echo _DOWNLOAD_QUOTES; ?></button>-->
 		<div id="divButtonQuotes">
 			<button id="buttonQuotes" title="<?php echo _DOWNLOAD_ALL_TITLE; ?>"><?php echo _DOWNLOAD_QUOTES; ?></button>

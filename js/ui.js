@@ -7,7 +7,7 @@ var UI = {
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    maxLevel: 6,
+    maxLevel: 7,
 
     initialize: function(){
 

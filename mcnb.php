@@ -77,7 +77,7 @@ $locStrings = buildClientStrings();
         </script>
 
         <script type="text/javascript" src="js/ui.js"></script>
-        <script type="text/javascript" src="js/menu.js"></script>
+        <script type="text/javascript" src="js/menu.expo.js"></script>
         <script type="text/javascript" src="js/starter.js"></script>
         <script type="text/javascript" src="js/mi.js"></script>
 

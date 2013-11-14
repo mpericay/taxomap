@@ -318,23 +318,6 @@ select {
     padding: 10px;
 }
 
-#divSheetModal #photoTitle {
-    text-align: justify;
-    padding: 5px;
-    color: #888;
-}
-
-
-#divSheetModal #photo {
-    max-width: 240px;
-    margin-right: 10px;
-}
-
-#divSheetModal #swfvideo {
-    display: none;
-    padding: 20px 0px:
-}
-
 #divSheetModal #links {
     padding: 10px;
     color: #57b4df;
@@ -354,6 +337,10 @@ select {
 
 #divSheetModal #loading {
     display: block;
+}
+
+#divSheetModal a {
+    color: #57b4df;
 }
 
 #divToolbar{
@@ -474,6 +461,18 @@ select {
     margin-right: 5px;
 }
 
+.menuSubtitle {
+	font-size: 11px;
+	/*text-align: right;
+	margin-bottom: 8px;
+	margin-right: 8px;*/
+	margin-left: 40px;
+}
+
+.menuSubtitle a {
+	color: #2D3052 !important;
+}
+
 #taxon-list .ui-menu .menuTitle a {
     background-color: #2D3052;
     color: #FFF !important;
@@ -553,7 +552,10 @@ height: 1px;
 #divInfoButton {
     border-color: #57B4DF;
     cursor: pointer;
-	/*position: absolute;
-    right: 20px;
-    top: 7px;*/
+}
+
+/* showSheet: hack for Wikipedia table on the right */
+.biota {
+	margin: 0 0 0.5em 1em;
+	float: right;
 }

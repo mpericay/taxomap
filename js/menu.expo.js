@@ -27,12 +27,9 @@ var Menu = {
         var active_taxon = (child ? child['name'] : parent['children'][0]['name']);
         
         var data = "<li class='menuTitle'>";
-        data += "<a href=\"javascript:UI.showSheet()\">" + active_taxon + "<br/><span class='menuSubtitle'>> " + locStrings._see_sheet + "</span></a>";
-        //data += "</li>";
+        data += "<a href=\"#\">" + active_taxon + "</a>";
+        data += "</li>";
         
-        //data += "<div class='menuSubtitle'>";
-        //data += "<a href=\"javascript:UI.showSheet()\" title=\"" + locStrings._see_sheet_title + " " + active_taxon + "\">" + locStrings._see_sheet + "</a>";
-        //data += "</div>";
         $("#taxon-list ul").append(data);
         if(child && child["children"]) $("#taxon-list ul").append(Menu.drawChildren(child["children"], level));
 

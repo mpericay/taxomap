@@ -46,7 +46,7 @@ define("_GENERIC_DOWNLOAD","Download");
 define("_GENERIC_SCALE","Scale");
 define("_GENERIC_INFORMATION","Information");
 define("_GENERIC_TITLE","Taxo&Map: collections of the Natural Science Museum of Barcelona");
-define("_GENERIC_SUBTITLE","Map Server");
+define("_GENERIC_MOREINFO","more information");
 define("_INDEX_META_KEYWORDS","taxo&map, taxon, collections, map, maps, species, map server, Natural Science Museum of Barcelona, MCNB");
 define("_INDEX_META_DESCRIPTION","WMS Map Server of the MCNB");
 define("_LOADING_APPLICATION","Loading application");
@@ -54,6 +54,7 @@ define("_PLEASE_WAIT","Please, wait a moment");
 define("_ERROR_MSG", "An error has occurred");
 define("_ERROR_BACK", "Return home");
 define("_NO_RESULTS_FOUND", "Couldn't find");
+define("_AT_WIKIPEDIA", "on Wikipedia");
 
 //************************************************************************
 //
@@ -77,7 +78,7 @@ define("_SECTION_INFODIALOG", "Search results");
 
 define("_BACK_HOME", "Start again");
 define("_TAXON_SEARCH", "Taxon search");
-define("_SEE_SHEET", "See sheet");
+define("_SEE_SHEET", "see description");
 define("_SEE_SHEET_TITLE", "See the description sheet of the selected taxon");
 define("_DOWNLOAD_QUOTES", "All results");
 define("_DOWNLOAD_ALL_TITLE", "Download all results of the taxon in CSV format");
@@ -115,5 +116,13 @@ define("_AREA_TEXT","Calculation of areas:  on the map, click on the points for 
 define("_PRINT_TEXT","Print:  click create PDF in information to get the PDF of the map");
 define("_HELP_TEXT","Show video-help");
 define("_TRANSPARENCY_TEXT","Opacity");
+
+//************************************************************************
+//
+// Sheet
+//
+//************************************************************************
+define("_SHEET_LOADING", "Loading info from Wikipedia ...");
+define("_SHEET_SUBTITLE", "This information was extracted from Wikipedia. Go to original article");
 
 ?>
