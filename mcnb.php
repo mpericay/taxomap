@@ -76,7 +76,7 @@ $locStrings = buildClientStrings();
             <? } ?>
         </script>
 
-        <script type="text/javascript" src="js/ui.js"></script>
+        <script type="text/javascript" src="js/ui.expo.js"></script>
         <script type="text/javascript" src="js/menu.expo.js"></script>
         <script type="text/javascript" src="js/starter.js"></script>
         <script type="text/javascript" src="js/mi.js"></script>
@@ -100,8 +100,8 @@ $locStrings = buildClientStrings();
     <body>
         
         <div id="divMain" style="visibility:hidden">
-            <?php include "sections/section.header.php" ?>
-            <?php include "sections/section.top.php" ?>
+            <?php include "sections/section.header.expo.php" ?>
+            <?php include "sections/section.top.expo.php" ?>
             <?php include "sections/section.left.php" ?>
             <?php include "sections/section.splitter.php" ?>
             <?php include "sections/section.right.php" ?>

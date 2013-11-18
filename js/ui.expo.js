@@ -1,10 +1,8 @@
 var UI = {
 
-    modalHelpWidth: 580,
-	modalWidth: 600,
+    modalHelpWidth: 450,
     active_taxon_id: null,
     active_taxon_level: null,
-    active_taxon_name: null,
     position_infobox: null,
     dialogHeight: 153,
     dialogWidth: 180,
@@ -17,9 +15,9 @@ var UI = {
 
         this.displaySlideBar();
 
-        this.createHelpDiv();
+        //this.createHelpDiv();
 
-        this.createLegend(); 
+        this.createLegend();
 
         this.createOverview();
 
@@ -27,9 +25,8 @@ var UI = {
 
         this.createSheetDiv();
 
-        this.createLegalDiv();
-		
-		this.createAboutDiv();
+        // create searchmap
+        //this.createCountrySearch();
 
         // create taxo search
         this.createTaxoSearch();
@@ -52,40 +49,24 @@ var UI = {
 
     },
 
+    disableExternalLinks: function(){
+
+		$(".egvControlAttribution").hide();
+    },
+
     registerEvents: function(){
-        
-        $("#aHelp").bind("click", function() {
-            UI.showModal("Help");
-        });
 
-        $("#aLegal").bind("click", function() {
-            UI.showModal("Legal");
-        });
-		
-        $("#aAbout").bind("click", function() {
-            UI.showModal("About");
-        });		
+        setTimeout(this.disableExternalLinks, 2000);
 
-        /*$("#buttonSheet").click(function() {
-            UI.showSheet($("#divSheetModal"));
-        });*/
+        $("#buttonSheet").click(function() {
+            $("#divSheetModal").dialog("open");
+            //UI.showSheet($("#divSheetModal"));
+        });
 
         $("#buttonQuotes").click(function() {
             MI.getQuotes();
         });
-		
-		$("#buttonQuotesCSV").click(function() {
-            MI.getQuotes(null, "csv");
-        });
-		
-		$("#buttonQuotesKML").click(function() {
-            MI.getQuotes(null, "kml");
-        });
-		
-		$("#buttonQuotesSHP").click(function() {
-            MI.getQuotes(null, "shp");
-        });		
-		
+
         $('.searchbox').focusout(function () {
         //$(this).prev('label').css('color','#111');
         if ($(this).attr('value') == '') {
@@ -108,7 +89,7 @@ var UI = {
 
     },
 
-    setTaxon: function(taxon_id, level){ 
+    setTaxon: function(taxon_id, level){
         // make sure that taxon is changing
         if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
 
@@ -116,9 +97,8 @@ var UI = {
         if(map == null) return;
 
         // set visible and hidden layers basing on level
-        var levels = new Array("domain", "kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
+        var levels = new Array("domain","kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
         var conn = map.getConnection("bioexplora");
-        //GBIF LAYER TEST: uncomment this! Marti
         for (var i=0; i<levels.length; i++){
             var layer = conn.getLayerByName(levels[i]);
             // non-existant layers (animalia) are ignored
@@ -165,11 +145,16 @@ var UI = {
                 
                 $("#divBreadcrumb").html(UI.drawBreadcrumb(data,0, level));
 
+                // WHILE SHEET IS IN PROCESS --to be changed to UI.drawSheet
+                UI.drawSheetInProcess($("#divSheetModal"), active_taxon);
+
                 UI.active_taxon_id = taxon_id;
                 UI.active_taxon_level = level;
-                UI.active_taxon_name = active_taxon;
 
                 if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(UI.position_infobox);
+
+                // delete taxo search? no need
+                //$("#taxon").val("");
                 
             } else {
                 Menu.error();
@@ -383,23 +368,6 @@ var UI = {
 
     },
 
-    createHelpDiv: function(){
-
-        $("#divHelpModal").dialog({
-                autoOpen: false,
-                modal: true,
-                draggable: false,
-                resizable: false,
-                title: locStrings._section_help,
-                width: UI.modalHelpWidth
-        });
-
-		$.get("sections/ajuda." + locale + ".html", function(data){
-            $("#divHelpModal").html(data);
-        });
-
-     },
-
     createSheetDiv: function(){
 
         $("#divSheetModal").dialog({
@@ -408,40 +376,23 @@ var UI = {
                 draggable: true,
                 resizable: true,
                 title: locStrings._section_sheet,
-                width: 850,
-                height: 500,
-                close: function() {
-                    $("#divSheetModal #content").hide();
-                    $("#divSheetModal #loading").show();
-                }
+                width: 770,
+                height: 400
         });
      },
 
-     createLegalDiv: function(){
+     createCreditsDiv: function(){
 
-        $("#divLegalModal").dialog({
+        $("#divCreditsModal").dialog({
                 autoOpen: false,
                 modal: true,
                 draggable: true,
                 resizable: true,
-                title: locStrings._section_legal,
-                width: UI.modalWidth
+                title: "Crèdits",
+                width: UI.modalHelpWidth
                 //height: 400
         });
      },
-	 
-     createAboutDiv: function(){
-
-        $("#divAboutModal").dialog({
-                autoOpen: false,
-                modal: true,
-                draggable: true,
-                resizable: true,
-                title: locStrings._section_about,
-                width: UI.modalWidth
-                //height: 400
-        });
-     },	 
 
     createTaxoSearch: function(){
 		$( "#taxon" ).autocomplete({
@@ -473,44 +424,41 @@ var UI = {
 
       },
 
+    createCountrySearch: function(){
+		$( "#country" ).autocomplete({
+                        delay: 300,
+			source: "php/geoservices/index.php?op=searchcountry",
+			minLength: 2,
+			select: function( event, ui ) {
+                                // no results found
+                                if(!ui.item.id) {
+                                    // we prevent the value to be displayed on input
+                                    event.preventDefault();
+                                    return;
+                                }
+				if(ui.item) {
+                                    MI.bringExtent2Center(ui.item.minx, ui.item.miny, ui.item.maxx, ui.item.maxy);
+                                }
+                                else alert("Nothing selected, input was " + this.value);
+
+                                // added
+                                //$( "#country" ).removeClass( "ui-autocomplete-loading" );
+			},
+			open: function() {
+				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			},
+			close: function() {
+				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			}
+		});
+      },
+
       createButtons: function(){
             $("button").button(); // every button is a jquery button widget
-	  
-			// top dropdown menu
-			this.buildDropdownMenu("buttonQuotes");
-
 
             $( "#divBaseLayerSwitcher" ).buttonset();
       },
-	  
-	  buildDropdownMenu: function(id){
-	  
-		$( "#" + id ).button().next()
-				.button({
-				text: false,
-				icons: {
-				primary: "ui-icon-triangle-1-s"
-				}
-				})
-				.click(function() {
-					var menu = $( this ).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$( document ).one( "click", function() {
-					menu.hide();
-				});
-				return false;
-				})
-				.parent()
-				.buttonset()
-				.next()
-				.hide()
-				.menu();	
 
-	},
-	
     createOverview: function(){
 
        $("#divOverviewMapContainer").dialog({
@@ -619,32 +567,16 @@ var UI = {
 
      showSheet: function(div){
 
-         if(!div) var div = $("#divSheetModal");
-         
-         div.dialog("open");
-         div.dialog("option", "title", UI.active_taxon_name);
-         
-         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
-         //var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=query&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
-             
-         $.getJSON(wiki_url+"&callback=?", //for JSONP
+        $.getJSON("php/geoservices/index.php?op=getsheet",
             {
-                //additional params
-                //ID: UI.active_taxon_id
+            LEVEL: UI.active_taxon_level,
+            ID: UI.active_taxon_id
             },
             function(data){
             // parse JSON data
-                if(data.parse) UI.drawWikiSheet(div, data);
-                else {
-                    div.find("#title").html(locStrings._no_results_found);
-                    div.find("#desc").html(locStrings._no_results_found +" "+UI.active_taxon_name+ " " + locStrings._at_wikipedia);
-                    div.find("#subtitle").hide();
-                }
-                div.find("#content").show();
-                div.find("#loading").hide();
-                UI.drawLinksSheet(div, UI.active_taxon_name);
+                if(data) UI.drawSheet(div, data);
+                else div.html(locStrings._no_results_found+" "+UI.active_taxon_id);
         });
-             
 
      },
 
@@ -669,55 +601,41 @@ var UI = {
 		for(var i=0; i<arrayLocales.length; i++) {
 			if(arrayLocales[i] != locale) {
 				var name = localeNames[arrayLocales[i]];
-				data += '<a href="taxomap.php?lang=' + arrayLocales[i] + '" title="'+ name +'">'+ name +'</a>';
+				data += '<a href="mcnb.php?lang=' + arrayLocales[i] + '" title="'+ name +'">'+ name +'</a>';
 			}
 		}
 		
 		$("#divHeaderLinks").html(data);
 		
-	 },
-	 
-	 drawWikiSheet: function(div, data){
-	     
-         var title = data.parse.title;
-         div.find("#title").html(title);
-         
-         div.find("#subtitle").html(locStrings._sheet_subtitle + " <a href='http://" + locale + ".wikipedia.org/wiki/" + title + "' target='_blank'>"+locStrings._generic_here+"</a>").show();
+	 },	 
 
-         // get raw HTML text ... but we need to do a few hacks
-         div.find("#desc").html(data.parse.text["*"]);
-         
-         //HACKS
-         //remove links
-         $('#desc a').replaceWith(function() {
-             return this.childNodes;
-         });
-         //remove areas (with links)
-         $('#desc area').remove();         
-         //remove references
-         $('#desc .reference ').remove();
-         //remove references errors
-         $('#desc .mw-ext-cite-error').remove();
-         //remove disambiguations 
-         //$('#desc .dablink').remove();
-
+     drawSheet: function(div, data){
+         if(data.name) {
+             div.find("#title").html(data.name);
+             div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+data.name);
+             div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+data.name);
+             div.find("#eol").attr("href", "http://eol.org/api/search/1.0/"+data.name);
+         }
+         if(data.subtitle) div.find("#subtitle").html(data.title);
+         if(data.desc) div.find("#desc").html(data.desc);
+         if(data.photo) div.find("#photo").html(data.photo);
+         if(data.phototitle) div.find("#photoTitle").html(data.phototitle);
      },
-     
-     drawLinksSheet: function(div, title){
+
+     drawSheetInProcess: function(div, title){
+         div.find("#title").html(title);
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
-         div.find("#gbif").attr("href", "http://www.gbif.org/species/search?q="+title);
-         div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));
+         div.find("#gbif").attr("href", "http://secretariat.mirror.gbif.org/occurrences/search.htm?c[0].s=0&c[0].p=0&c[0].o="+title);
+         div.find("#eol").attr("href", "http://eol.org/api/search/1.0/"+title);
      },
 
     drawInfoResults: function(div, childArray){
         var level = parseInt(childArray['level']); // must be a number!
         var data = "<ul><li";
-        data += " class='main' id='mainInfoLine'";
+        data += " class='main'";
         data += "><a href=\"javascript:UI.setTaxon('"+childArray['id']+"','"+level+"')\">" + childArray['name'] + "</a>";
         if(childArray['value']) data += ": " + childArray['value'];
         //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
-		data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";
-		data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li></ul>";
         data += "</li>";
         if(childArray['children']) {
                 for(var k=0; k<childArray['children'].length; k++) {
@@ -730,30 +648,10 @@ var UI = {
         }
         data += "</ul>";
         div.html(data);
-		
-		$("#divInfoButton").position({
-			my: "right top",
-			at: "right top",
-			of: $("#mainInfoLine")
-		});		
 
-        this.buildDropdownMenu("infoButton");
-		
-		$("#infoButton").click(function() {
+        $("#infoLink").click(function() {
             MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox));
         });
-		
-		$("#infoQuotesCSV").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "csv");
-        });
-		
-		$("#infoQuotesKML").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "kml");
-        });		
-		
-		$("#infoQuotesSHP").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "shp");
-        });			
     },
     
     displaySlideBar: function(){
@@ -783,14 +681,10 @@ var UI = {
             }
         });
     },
-	
+
     showModal: function(id){
         $("#div"+id+"Modal").dialog("open");
-    },
-	
-    showInfoModal: function(id){
-        $("#divInfoDialog").dialog("open");
-    }	
+    }
 
 }
 
