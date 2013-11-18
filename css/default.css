@@ -463,10 +463,9 @@ select {
 
 .menuSubtitle {
 	font-size: 11px;
-	/*text-align: right;
+	text-align: right;
 	margin-bottom: 8px;
-	margin-right: 8px;*/
-	margin-left: 40px;
+	margin-right: 8px;
 }
 
 .menuSubtitle a {
