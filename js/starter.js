@@ -94,7 +94,7 @@ function initialize(){
         },
         {
             "singleTile":true,
-            "ratio":1.5,
+            "ratio":1.0,
             "opacity":0.8
         },
         {
