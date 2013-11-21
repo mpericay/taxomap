@@ -465,12 +465,12 @@ select {
 	font-size: 11px;
 	text-align: right;
 	padding-bottom: 8px;
-	margin-right: 8px;
 	border-bottom: 1px solid #E5E5E5;
 }
 
 .menuSubtitle a {
 	color: #2D3052 !important;
+	margin-right: 8px;
 }
 
 #taxon-list .ui-menu .menuTitle a {
