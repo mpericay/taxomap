@@ -103,6 +103,7 @@ var MI = {
             service += (map.getScale() > scale_change ? "" : "detail");
         }
         service += "&FORMAT=" + format;
+        if(locale) service += "&LANG=" + locale;
 		location.href = service;
     },
 

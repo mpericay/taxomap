@@ -314,12 +314,13 @@ class geodatanode {
                 $bbox = $this->getParameter("BBOX");
                 $grid = $this->getParameter("GRID");
 				$format = $this->getParameter("FORMAT");
+				$lang = $this->getParameter("LANG");
                 //we need to get $level=0 (Animalia)!!!
                 if(!$id) {
                     $this->logError("geodatanode::handle - Error in getQuotes [Required parameters id, level missing]");
                     return false;
                 }
-                $this->result = $this->getQuotes($level,$id,$bbox, $grid, $format);
+                $this->result = $this->getQuotes($level,$id,$bbox, $grid, $format, $lang);
                 if ($this->result === false) {
                     $this->logError("geodatanode::handle - Error in getQuotes [".$this->db->get_error_description()."]");
                     return false;
@@ -662,7 +663,7 @@ class geodatanode {
         return $result;
     }
 
-    public function getQuotes($level = 0, $id = false, $bbox = false, $grid = '', $format = 'csv') {
+    public function getQuotes($level = 0, $id = false, $bbox = false, $grid = '', $format = 'csv', $lang = 'en') {
 
         $this->__clearCache(_GEODATANODE_TEMP_DIR);
 
@@ -697,15 +698,17 @@ class geodatanode {
 					   q.latitude,
 					   q.coordinate_precision AS precision,
 					   q.country,
+					   c.".$lang." AS country_name,
 					   q.state_province,
-					   q.county,
 					   q.locality
 					   FROM specie s ";
 			
 		// we need the specie name!
-		$sql.= " LEFT JOIN quote q ON q.specie_id = s.id ";
-		if ($level != 0) $sql.= "WHERE specie_id in (".$specieslist.")";
-		else $sql.= "WHERE specie_id IS NOT NULL";
+		$sql.= " LEFT JOIN quote q ON q.specie_id = s.id";
+		// we need the country
+		$sql .= " LEFT JOIN countries c ON q.country = c.code";
+		if ($level != 0) $sql.= " WHERE specie_id in (".$specieslist.")";
+		else $sql.= " WHERE specie_id IS NOT NULL";
 		
 		if($bbox) {
 			$gridcodes = $this->getGridSelection($bbox, $grid);
@@ -881,12 +884,12 @@ class geodatanode {
 			   "scientific_name" => "Scientific Name",
 			   "longitude" => "Longitude",
 			   "latitude" => "Latitude",
-			   "coordinate_precision" => "Coordinate Precision",
+			   "precision" => "Coordinate Precision",
 			   "country" => "Country",
+			   "country_name" => "Country name",
 			   "state_province" => "State Province",
-			   "county" => "County",
 			   "locality" => "Locality");
-			   
+
 		//draw fields
 		foreach ($quotes[0] as $camp => $columna){
 			//aliases
