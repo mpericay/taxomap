@@ -249,15 +249,6 @@ class geodatanode {
                 }
                 break;
 
-            case "searchcountry":
-                $name = $this->getParameter("TERM");
-                $this->result = $this->searchCountry($name);
-                if ($this->result === false) {
-                    $this->logError("geodatanode::handle - Error in searchCountry [".$this->db->get_error_description()."]");
-                    return false;
-                }
-                break;
-
             case "getinfobox":
                 $level = $this->getParameter("LEVEL");
                 $id = $this->getParameter("ID");
@@ -613,33 +604,6 @@ class geodatanode {
         return $result;
     }
 
-    public function searchCountry($name, $lang = "ca") {
-         if (!$this->ready) {
-            $this->logError("geodatanode::searchCountry - Service not ready");
-            return false;
-        }
-
-        $result = array();
-
-        $sql = "SELECT ".$lang." AS label, fips AS id, 
-            ST_XMin(st_box3d(the_geom)) AS minx,
-            ST_XMax(st_box3d(the_geom)) AS maxx,
-            ST_YMin(st_box3d(the_geom)) AS miny,
-            ST_YMax(st_box3d(the_geom)) AS maxy
-            FROM countries WHERE UPPER(unaccent_string(".$lang.")) LIKE UPPER(unaccent_string('".$name."%'))";
-
-        $countrieslist = $this->executeSQL($sql,true);
-        if($countrieslist) {
-            for($i = 0; $i < count($countrieslist); $i++) {
-                array_push($result, $countrieslist[$i]);
-            }
-        }
-
-        if(!$result) $result = array(array("id"=>0, "label"=>"No s'ha trobat: ".$name));
-
-        return $result;
-    }
-
     public function getSheet($level = false, $id = false) {
 
         if (!$this->ready) {
@@ -700,13 +664,17 @@ class geodatanode {
 					   q.country,
 					   c.".$lang." AS country_name,
 					   q.state_province,
-					   q.locality
+					   q.locality,
+					   i.name AS institution,".
+					   $this->getDateFormat($lang)."
 					   FROM specie s ";
 			
 		// we need the specie name!
 		$sql.= " LEFT JOIN quote q ON q.specie_id = s.id";
 		// we need the country
-		$sql .= " LEFT JOIN countries c ON q.country = c.code";
+		$sql .= " LEFT JOIN country c ON q.country = c.code";
+		// we need the institution name
+		$sql .= " LEFT JOIN institution i ON q.institution_code = i.id";
 		if ($level != 0) $sql.= " WHERE specie_id in (".$specieslist.")";
 		else $sql.= " WHERE specie_id IS NOT NULL";
 		
@@ -753,6 +721,11 @@ class geodatanode {
 		
         return $buffer;
 
+    }
+    
+    private function getDateFormat($lang) {
+    	if($lang == "en") return "(q.year_collected || '/' || q.month_collected || '/' || q.day_collected) AS date_collected";
+    	else return "(q.day_collected || '/' || q.month_collected || '/' || q.year_collected) AS date_collected";
     }
 	
 	private function buildSHP($sql) {
@@ -888,6 +861,8 @@ class geodatanode {
 			   "country" => "Country",
 			   "country_name" => "Country name",
 			   "state_province" => "State Province",
+		       "date_collected" => "Date collected",
+			   "institution" => "Institution",
 			   "locality" => "Locality");
 
 		//draw fields
