@@ -800,7 +800,7 @@ class geodatanode {
 		  
 		  if($lat && $long) {
 			  $desc = $quotes[$i]['locality'];
-			  if($desc) $desc .= $quotes[$i]['country'] ? ' (' . $quotes[$i]['country'] . ')' : '';
+			  if($desc) $desc .= $quotes[$i]['country_name'] ? ' (' . $quotes[$i]['country_name'] . ')' : '';
 			  
 			  $kml[] = ' <Placemark id="' . $quotes[$i]['id'] . '">';
 			  $kml[] = ' <name>' . htmlspecialchars($quotes[$i]['scientific_name']) . '</name>';
