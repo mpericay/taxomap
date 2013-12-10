@@ -858,7 +858,7 @@ class geodatanode {
 			   "longitude" => "Longitude",
 			   "latitude" => "Latitude",
 			   "precision" => "Coordinate Precision",
-			   "country" => "Country",
+			   "country" => "Country code",
 			   "country_name" => "Country name",
 			   "state_province" => "State Province",
 		       "date_collected" => "Date collected",
