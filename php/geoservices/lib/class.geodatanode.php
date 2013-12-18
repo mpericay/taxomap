@@ -877,6 +877,7 @@ class geodatanode {
 		for($i=0; $i<count($quotes); $i++) {
 			$quote = '';
 			foreach ($quotes[$i] as $camp => $columna){
+				$columna = str_replace(";", " ", $columna);
 				$quote.= $quote ? ";".$columna : $columna;
 			}
 			$result.= $result ? "\n".$quote : $quote;
