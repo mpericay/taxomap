@@ -37,7 +37,6 @@ $locStrings = buildClientStrings();
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
         <meta http-equiv="Content-Style-Type" content="text/css" />
         <meta http-equiv="Content-Script-Type" content="text/javascript" />
-        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
         <meta name="keywords" lang="<?php echo _GENERIC_LANG_CODE; ?>" content="<?php echo _INDEX_META_KEYWORDS; ?>" />
         <meta name="description" lang="<?php echo _GENERIC_LANG_CODE; ?>" content="<?php echo _INDEX_META_DESCRIPTION; ?>" />
         <meta name="author" content="info@geodata.es" />
@@ -54,6 +53,9 @@ $locStrings = buildClientStrings();
         <script type="text/javascript" src="js/jquery/jquery-ui-1.8.16.slide.min.js"></script>
         <!-- we use MENU from jQuery-1.9 because we need to include links -->
         <script type="text/javascript" src="js/jquery/jquery.ui.menu-1.9.js"></script>
+        
+        <!-- include cartodb.core.js library -->
+    	<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.core.js"></script>
 
         <script type="text/javascript">
             var locale = "<?php echo _GENERIC_LANG_CODE; ?>";
