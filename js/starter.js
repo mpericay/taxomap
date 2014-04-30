@@ -249,7 +249,55 @@ function initialize(){
     ];
     egvConn1.map = map;
     egvConn1.addLayers(egvLayers1);
-    map.addConnection(egvConn1);
+    //map.addConnection(egvConn1);
+    
+    // request cartodb layer
+    cartodb.Tiles.getTiles({
+      type: 'cartodb',
+      user_name: 'marti',
+      sublayers: [{
+       sql: 'select * from herbari_cartodb',
+       cartocss: '#herbari_cartodb{marker-fill: #FFCC00;marker-width: 10;marker-line-color: #FFF;marker-line-width: 1.5;marker-line-opacity: 1;marker-opacity: 0.9;marker-comp-op: multiply;marker-type: ellipse;marker-placement: point;marker-allow-overlap: true;marker-clip: false;marker-multi-policy: largest; }'
+       //cartocss: "#herbari_cartodb{  marker-width: 10;  marker-fill: #FD8D3C;  marker-line-width: 1.5;  marker-opacity: 1;  marker-line-opacity: 1;  marker-line-color: #fff;  marker-allow-overlap: true;  marker-comp-op: dst-atop;  [src = 'bucketC'] {    marker-line-width: 5;    marker-width: 19;  }   [src = 'bucketB'] {    marker-line-width: 5;    marker-width: 36;  }   [src = 'bucketA'] {    marker-line-width: 5;    marker-width: 52;  } }#herbari_cartodb::labels {   text-size: 0;   text-fill: #fff;   text-opacity: 0.8;  text-name: [points_count];   text-face-name: 'DejaVu Sans Book';   text-halo-fill: #FFF;   text-halo-radius: 0;   [src = 'bucketC'] {    text-size: 12;    text-halo-radius: 0.5;  }  [src = 'bucketB'] {    text-size: 17;    text-halo-radius: 0.5;  }  [src = 'bucketA'] {    text-size: 22;    text-halo-radius: 0.5;  }  text-allow-overlap: true;  [zoom>11]{ text-size: 13; }  [points_count = 1]{ text-size: 0; }}"
+       
+      }]
+    }, function(tileTemplate) {
+      // generate urls for openlayers
+      var tilesUrl = []
+      for(var i = 0; i < 4; ++i) {
+        tilesUrl.push(
+          tileTemplate.tiles[0]
+            .replace('{s}', 'abcd'[i])
+            .replace('{z}','${z}')
+            .replace('{x}','${x}')
+            .replace('{y}','${y}')
+        );
+      }
+
+      // create the openlayers layer
+      var cartodbLayer = new OpenLayers.Layer.XYZ(
+              "CartoDB example",
+              tilesUrl, {
+                attribution: "Herbari cartoDB",
+                sphericalMercator: true,
+                isBaseLayer: false
+              });      
+
+      //cartodb connection
+      var egvConnCarto  = new eGV.Connection(
+            "cartodb",
+            cartodbLayer,
+                {
+                "id":"cartodb",
+                "title":"cartodb",
+                "visible": true     
+                }
+            );
+              
+      // add to the map
+      //map.addLayer(cartodbLayer);
+      map.addConnection(egvConnCarto);
+    });    
 
     //MI.addParamsSRS("EPSG:900913"); // WHAT FOR?
 
@@ -296,16 +344,16 @@ function initialize(){
     //toolBar.getControl("infoControl").events.register("actionend", UI, UI.displayInfoSectionDiv);
     
     var transparencyConnections = [
-      map.getConnection("bioexplora")
+      map.getConnection("cartodb")
     ];
 
-    var transControl = new eGV.Control.Transparency({
+    /*var transControl = new eGV.Control.Transparency({
         id:"controlTransparency",
         minOpacity:0.2,
         defaultOpacity:0.8,
         connections:transparencyConnections
     });
-    eGV.addControl(transControl);
+    eGV.addControl(transControl);*/
 
     var baseLayers = egvConnOSM;
 

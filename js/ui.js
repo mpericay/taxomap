@@ -118,28 +118,32 @@ var UI = {
         // set visible and hidden layers basing on level
         var levels = new Array("domain", "kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
         var conn = map.getConnection("bioexplora");
-        //GBIF LAYER TEST: uncomment this! Marti
-        for (var i=0; i<levels.length; i++){
-            var layer = conn.getLayerByName(levels[i]);
-            // non-existant layers (animalia) are ignored
-            if(layer) {
-                // only selected level is visible
-                if(i == level) {
-                    conn.setVisible(layer.name,true);
-                    conn.setVisible(layer.name+"_detail",true);
-                }
-                else {
-                    conn.setVisible(layer.name,false);
-                    conn.setVisible(layer.name+"_detail",false);
+        
+        if(conn) {
+        
+            //GBIF LAYER TEST: uncomment this! Marti
+            for (var i=0; i<levels.length; i++){
+                var layer = conn.getLayerByName(levels[i]);
+                // non-existant layers (animalia) are ignored
+                if(layer) {
+                    // only selected level is visible
+                    if(i == level) {
+                        conn.setVisible(layer.name,true);
+                        conn.setVisible(layer.name+"_detail",true);
+                    }
+                    else {
+                        conn.setVisible(layer.name,false);
+                        conn.setVisible(layer.name+"_detail",false);
+                    }
                 }
             }
+    
+            // set id param in layer
+            conn.olLayer.params.id = taxon_id;
+    
+            // refresh map
+            conn.redraw(true);
         }
-
-        // set id param in layer
-        conn.olLayer.params.id = taxon_id;
-
-        // refresh map
-        conn.redraw(true);
 
         //loading while AJAX request
         Menu.loading();
