@@ -8,6 +8,8 @@ function initialize(){
         "units": "m",
         "projection": "EPSG:900913",
         "id":"eGVMapBioexplora",
+        // for OpenLayers 2.13.1 compatibility
+        "tileManager": null,		
         controls: [
         new OpenLayers.Control.Navigation(),
         //new OpenLayers.Control.PanPanel(),

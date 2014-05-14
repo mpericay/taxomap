@@ -46,7 +46,7 @@ $locStrings = buildClientStrings();
         <link type="text/css" href="css/blue/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         
 		<!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&v=3.6"></script>-->
-        <script type="text/javascript" src="js/openlayers-2.12/OpenLayers.js"></script>
+        <script type="text/javascript" src="js/openlayers-2.13.1/OpenLayers.js"></script>
         <script type="text/javascript" src="js/viewer-3.0/client/egv-init-c.js"></script>
         <script type="text/javascript" src="js/class.infobox.js"></script>
 		<script type="text/javascript" src="js/class.infopan.js"></script>
