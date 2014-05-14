@@ -117,32 +117,30 @@ var UI = {
 
         // set visible and hidden layers basing on level
         var levels = new Array("domain", "kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
-        var conn = map.getConnection("bioexplora");
+        var conn = map.getConnection("cartodbConn");
         
         if(conn) {
-        
-            //GBIF LAYER TEST: uncomment this! Marti
-            for (var i=0; i<levels.length; i++){
-                var layer = conn.getLayerByName(levels[i]);
-                // non-existant layers (animalia) are ignored
-                if(layer) {
-                    // only selected level is visible
-                    if(i == level) {
-                        conn.setVisible(layer.name,true);
-                        conn.setVisible(layer.name+"_detail",true);
-                    }
-                    else {
-                        conn.setVisible(layer.name,false);
-                        conn.setVisible(layer.name+"_detail",false);
-                    }
-                }
-            }
-    
-            // set id param in layer
-            conn.olLayer.params.id = taxon_id;
-    
-            // refresh map
-            conn.redraw(true);
+            cartodbTiles.setQuery("select * from herbari_cartodb limit 10");
+            cartodbTiles.getTiles(function(tileTemplate) {
+                // update here the tilesUrl in openlayers layer
+                var tilesUrl = [];
+                for(var i = 0; i < 4; ++i) {
+                    tilesUrl.push(
+                      tileTemplate.tiles[0]
+                        .replace('{s}', 'abcd'[i])
+                        .replace('{z}','${z}')
+                        .replace('{x}','${x}')
+                        .replace('{y}','${y}')
+                    );
+                  }
+                var map = eGV.getMap();
+                if(map == null) return;
+                //TODO= REDO!!!
+                var cartodbLayer = map.layers[2];                
+                cartodbLayer.setUrl(tilesUrl);
+                cartodbLayer.redraw();
+               });
+
         }
 
         //loading while AJAX request

@@ -252,7 +252,7 @@ function initialize(){
     //map.addConnection(egvConn1);
     
     // request cartodb layer
-    cartodb.Tiles.getTiles({
+    cartodbTiles = cartodb.Tiles.getTiles({
       type: 'cartodb',
       user_name: 'marti',
       sublayers: [{
@@ -271,35 +271,33 @@ function initialize(){
             .replace('{z}','${z}')
             .replace('{x}','${x}')
             .replace('{y}','${y}')
-        );
-      }
-
-      // create the openlayers layer
-      var cartodbLayer = new OpenLayers.Layer.XYZ(
-              "CartoDB example",
-              tilesUrl, {
-                attribution: "Herbari cartoDB",
-                sphericalMercator: true,
-                isBaseLayer: false
-              });      
-
-      //cartodb connection
-      var egvConnCarto  = new eGV.Connection(
-            "cartodb",
-            cartodbLayer,
-                {
-                "id":"cartodb",
-                "title":"cartodb",
-                "visible": true     
-                }
             );
-              
-      // add to the map
-      //map.addLayer(cartodbLayer);
-      map.addConnection(egvConnCarto);
+          }
+    
+          // create the openlayers layer
+          var cartodbLayer = new OpenLayers.Layer.XYZ(
+                  "cartodbLayer",
+                  tilesUrl, {
+                    attribution: "MCNB",
+                    sphericalMercator: true,
+                    isBaseLayer: false
+                  });      
+    
+          //cartodb connection
+          var egvConnCarto  = new eGV.Connection(
+                "cartodbConn",
+                cartodbLayer,
+                    {
+                    "id":"cartodbConn",
+                    "title":"cartodb",
+                    "visible": true     
+                    }
+                );
+                  
+          // add to the map
+          //map.addLayer(cartodbLayer);
+          map.addConnection(egvConnCarto);
     });    
-
-    //MI.addParamsSRS("EPSG:900913"); // WHAT FOR?
 
 /*********** END LAYERS **********/
 

@@ -76,6 +76,8 @@ $locStrings = buildClientStrings();
             <? } else { ?>
                 var initial_view = false;
             <? } ?>
+
+            var cartodbTiles;
         </script>
 
         <script type="text/javascript" src="js/ui.js"></script>
