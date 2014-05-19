@@ -112,36 +112,12 @@ var UI = {
         // make sure that taxon is changing
         if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
 
-        var map = eGV.getMap();
-        if(map == null) return;
-
         // set visible and hidden layers basing on level
-        var levels = new Array("domain", "kingdom", "phylum", "classe", "ordre", "familia", "genus", "specie");
-        var conn = map.getConnection("cartodbConn");
-        
-        if(conn) {
-            cartodbTiles.setQuery("select * from herbari_cartodb limit 10");
-            cartodbTiles.getTiles(function(tileTemplate) {
-                // update here the tilesUrl in openlayers layer
-                var tilesUrl = [];
-                for(var i = 0; i < 4; ++i) {
-                    tilesUrl.push(
-                      tileTemplate.tiles[0]
-                        .replace('{s}', 'abcd'[i])
-                        .replace('{z}','${z}')
-                        .replace('{x}','${x}')
-                        .replace('{y}','${y}')
-                    );
-                  }
-                var map = eGV.getMap();
-                if(map == null) return;
-                //TODO= REDO!!!
-                var cartodbLayer = map.layers[2];                
-                cartodbLayer.setUrl(tilesUrl);
-                cartodbLayer.redraw();
-               });
+        var levels = new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "species");
 
-        }
+        var sql = "select * from mcnb" + " where " + levels[level] + "='" + taxon_id + "'";
+        
+        MI.loadCartodbLayer(sql);
 
         //loading while AJAX request
         Menu.loading();

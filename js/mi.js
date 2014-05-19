@@ -1,6 +1,7 @@
 var MI = {
 
 	highlightedGridName: "Box",
+	cartodbTiles : null,
 
     zoomToPoint: function(latlon,zoomScale){
         var map = eGV.getMap();
@@ -183,60 +184,64 @@ var MI = {
         });
     },
     
-    addCartoDBLayer: function($sql) {
+    loadCartodbLayer: function(sql) {
         
-        var map = eGV.getMap(); 
-        
-        var conn = map.getConnection("cartodbConn");
-        if(conn) map.removeConnection(conn);
-            
-        // request cartodb layer
-        cartodb.Tiles.getTiles({
-          type: 'cartodb',
-          user_name: 'marti',
-          sublayers: [{
-           sql: $sql,
-           cartocss: '#herbari_cartodb{marker-fill: #FFCC00;marker-width: 10;marker-line-color: #FFF;marker-line-width: 1.5;marker-line-opacity: 1;marker-opacity: 0.9;marker-comp-op: multiply;marker-type: ellipse;marker-placement: point;marker-allow-overlap: true;marker-clip: false;marker-multi-policy: largest; }'
-           //cartocss: "#herbari_cartodb{  marker-width: 10;  marker-fill: #FD8D3C;  marker-line-width: 1.5;  marker-opacity: 1;  marker-line-opacity: 1;  marker-line-color: #fff;  marker-allow-overlap: true;  marker-comp-op: dst-atop;  [src = 'bucketC'] {    marker-line-width: 5;    marker-width: 19;  }   [src = 'bucketB'] {    marker-line-width: 5;    marker-width: 36;  }   [src = 'bucketA'] {    marker-line-width: 5;    marker-width: 52;  } }#herbari_cartodb::labels {   text-size: 0;   text-fill: #fff;   text-opacity: 0.8;  text-name: [points_count];   text-face-name: 'DejaVu Sans Book';   text-halo-fill: #FFF;   text-halo-radius: 0;   [src = 'bucketC'] {    text-size: 12;    text-halo-radius: 0.5;  }  [src = 'bucketB'] {    text-size: 17;    text-halo-radius: 0.5;  }  [src = 'bucketA'] {    text-size: 22;    text-halo-radius: 0.5;  }  text-allow-overlap: true;  [zoom>11]{ text-size: 13; }  [points_count = 1]{ text-size: 0; }}"
-           
-          }]
-        }, function(tileTemplate) {
-          // generate urls for openlayers
-          var tilesUrl = []
-          for(var i = 0; i < 4; ++i) {
-            tilesUrl.push(
-              tileTemplate.tiles[0]
-                .replace('{s}', 'abcd'[i])
-                .replace('{z}','${z}')
-                .replace('{x}','${x}')
-                .replace('{y}','${y}')
+        MI.cartodbTiles = cartodb.Tiles.getTiles({
+            type: 'cartodb',
+            user_name: 'marti',
+            sublayers: [{
+             sql: sql,
+             cartocss: '#herbari_cartodb{marker-fill: #FFCC00;marker-width: 10;marker-line-color: #FFF;marker-line-width: 1.5;marker-line-opacity: 1;marker-opacity: 0.9;marker-comp-op: multiply;marker-type: ellipse;marker-placement: point;marker-allow-overlap: true;marker-clip: false;marker-multi-policy: largest; }'
+             //cartocss: "#herbari_cartodb{  marker-width: 10;  marker-fill: #FD8D3C;  marker-line-width: 1.5;  marker-opacity: 1;  marker-line-opacity: 1;  marker-line-color: #fff;  marker-allow-overlap: true;  marker-comp-op: dst-atop;  [src = 'bucketC'] {    marker-line-width: 5;    marker-width: 19;  }   [src = 'bucketB'] {    marker-line-width: 5;    marker-width: 36;  }   [src = 'bucketA'] {    marker-line-width: 5;    marker-width: 52;  } }#herbari_cartodb::labels {   text-size: 0;   text-fill: #fff;   text-opacity: 0.8;  text-name: [points_count];   text-face-name: 'DejaVu Sans Book';   text-halo-fill: #FFF;   text-halo-radius: 0;   [src = 'bucketC'] {    text-size: 12;    text-halo-radius: 0.5;  }  [src = 'bucketB'] {    text-size: 17;    text-halo-radius: 0.5;  }  [src = 'bucketA'] {    text-size: 22;    text-halo-radius: 0.5;  }  text-allow-overlap: true;  [zoom>11]{ text-size: 13; }  [points_count = 1]{ text-size: 0; }}"
+             
+            }]},                
+            function(tileTemplate) {
+            // update here the tilesUrl in openlayers layer
+            var tilesUrl = [];
+            for(var i = 0; i < 4; ++i) {
+                tilesUrl.push(
+                  tileTemplate.tiles[0]
+                    .replace('{s}', 'abcd'[i])
+                    .replace('{z}','${z}')
+                    .replace('{x}','${x}')
+                    .replace('{y}','${y}')
                 );
               }
-        
-              // create the openlayers layer
-              var cartodbLayer = new OpenLayers.Layer.XYZ(
-                      "cartodbLayer",
-                      tilesUrl, {
-                        attribution: "MCNB",
-                        sphericalMercator: true,
-                        isBaseLayer: false
-                      });      
-        
-              //cartodb connection
-              var egvConnCarto  = new eGV.Connection(
-                    "cartodbConn",
-                    cartodbLayer,
-                        {
-                        "id":"cartodb",
-                        "title":"cartodb",
-                        "visible": true     
-                        }
-                    );
-                      
-              // add to the map
-              //map.addLayer(cartodbLayer);
-              map.addConnection(egvConnCarto);  
-        });
+            var map = eGV.getMap();
+            if(map == null) return;                
+            var conn = map.getConnection("cartodbConn");
+            
+            if(!conn) {
+                // create the openlayers layer
+                var cartodbLayer = new OpenLayers.Layer.XYZ(
+                        "cartodbLayer",
+                        tilesUrl, {
+                          attribution: "MCNB",
+                          sphericalMercator: true,
+                          isBaseLayer: false
+                        });      
+          
+                //cartodb connection
+                var egvConnCarto  = new eGV.Connection(
+                      "cartodbConn",
+                      cartodbLayer,
+                          {
+                          "id":"cartodbConn",
+                          "title":"cartodb",
+                          "visible": true     
+                          }
+                      );
+                        
+                // add to the map
+                //map.addLayer(cartodbLayer);
+                map.addConnection(egvConnCarto);
+                
+            } else {
+                var cartodbLayer = map.getLayersByName("cartodbLayer")[0];                
+                cartodbLayer.setUrl(tilesUrl);
+                cartodbLayer.redraw();
+            }
+           });
     }
 
 }
