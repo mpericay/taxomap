@@ -127,15 +127,6 @@ var UI = {
 
         //loading while AJAX request
         Menu.loading();
-        
-        //old way to get children
-        $.getJSON("php/geoservices/index.php?op=getbreadcrumb",
-                {
-                         LEVEL: level,
-                         ID: taxon_id,
-                         CHILDREN: true
-                }, {}, function(){});
-                
 
         // get taxon parents and children
         $.getJSON("http://marti.cartodb.com/api/v2/sql?",
