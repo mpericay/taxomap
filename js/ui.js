@@ -10,6 +10,7 @@ var UI = {
     dialogWidth: 180,
     dialogHeightMinimized: 30,
     maxLevel: 7,
+    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "species"),
 
     initialize: function(){
 
@@ -112,22 +113,34 @@ var UI = {
         // make sure that taxon is changing
         if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
 
-        // set visible and hidden layers basing on level
-        var levels = new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "species");
-
-        var sql = "select * from mcnb" + " where " + levels[level] + "='" + taxon_id + "'";
+        // we select only until parents and immediate children
+        var sqlSelect = "";
+        for(var i = 0; i-1 <= level; i++) {
+            if(sqlSelect) sqlSelect += ",";
+            sqlSelect += UI.levels[i];
+        }       
+        var sqlWhere = " where " + UI.levels[level] + "='" + taxon_id + "'";
+        var sqlMap = "select * from mcnb" + sqlWhere;
         
-        MI.loadCartodbLayer(sql);
+        //change the cartoDB taxon layer
+        MI.loadCartodbLayer(sqlMap);
 
         //loading while AJAX request
         Menu.loading();
+        
+        //old way to get children
+        $.getJSON("php/geoservices/index.php?op=getbreadcrumb",
+                {
+                         LEVEL: level,
+                         ID: taxon_id,
+                         CHILDREN: true
+                }, {}, function(){});
+                
 
         // get taxon parents and children
-        $.getJSON("php/geoservices/index.php?op=getbreadcrumb",
+        $.getJSON("http://marti.cartodb.com/api/v2/sql?",
         {
-          LEVEL: level,
-          ID: taxon_id,
-          CHILDREN: true
+          q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb "+sqlWhere
         },
         function(data){
             if(data) {
@@ -135,6 +148,8 @@ var UI = {
                     Menu.error(data.msg);
                     return;
                 }
+                data = UI.convertFromCartodb(data, parseInt(level));
+                
                 var parent = (level == "0") ? null : UI.getJSONValues(data, level-1);
                 var child = (level == UI.maxLevel) ? null : UI.getJSONValues(data, level);
                 var active_taxon = (child ? child['name'] : parent['children'][0]['name']);
@@ -157,6 +172,42 @@ var UI = {
         // refresh legend? no need, they are all the same
         //this.refreshLegend();
 
+    },
+    
+    convertFromCartodb: function (data, level) {
+        var rows = data.rows;
+        var children = new Array();
+        
+        //add children
+        for(var i = 0; i < rows.length; i++) {
+            children[i] = new Object();
+            children[i].id = rows[i][UI.levels[level + 1]];
+            children[i].name = rows[i][UI.levels[level + 1]];
+            children[i].parent = rows[i][UI.levels[level]];
+        }
+        
+        //add him
+        var bread = new Object();
+        bread.id = rows[0][UI.levels[level]];
+        bread.name = rows[0][UI.levels[level]];
+        bread.parent = rows[0][UI.levels[level-1]];
+        bread.children = children;
+        //add parents
+        for(var j = level -1; j >= 0 ; j--) {
+            bread = UI.addParent(bread, j, rows);
+        }         
+        return bread;
+    },
+    
+    addParent: function(children, levelId, cartoResult) {
+        var breadcrumb = new Object();
+        var level = UI.levels[levelId];
+        breadcrumb.id = cartoResult[0][level];
+        breadcrumb.name = cartoResult[0][level];
+        breadcrumb.parent = cartoResult[0][UI.levels[levelId-1]];
+        breadcrumb.children = new Array();
+        breadcrumb.children[0] = children;
+        return breadcrumb;
     },
     
     getJSONValues: function (data, level, i) {
