@@ -9,8 +9,8 @@ var UI = {
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    maxLevel: 7,
     levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "species"),
+    levelsId : new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid"),
 
     initialize: function(){
 
@@ -116,10 +116,13 @@ var UI = {
         // we select only until parents and immediate children
         var sqlSelect = "";
         for(var i = 0; i-1 <= level; i++) {
-            if(sqlSelect) sqlSelect += ",";
-            sqlSelect += UI.levels[i];
+            if(UI.levels[i]) {
+                if(sqlSelect) sqlSelect += ",";
+                sqlSelect += UI.levels[i];
+                sqlSelect += ","+UI.levelsId[i];
+            }
         }       
-        var sqlWhere = " where " + UI.levels[level] + "='" + taxon_id + "'";
+        var sqlWhere = " where " + UI.levelsId[level] + "='" + taxon_id + "'";
         var sqlMap = "select * from mcnb" + sqlWhere;
         
         //change the cartoDB taxon layer
@@ -134,15 +137,15 @@ var UI = {
           q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb "+sqlWhere
         },
         function(data){
-            if(data) {
+            if(data && data.total_rows) {
                 if(data.error) {
                     Menu.error(data.msg);
                     return;
-                }
+                } 
                 data = UI.convertFromCartodb(data, parseInt(level));
                 
                 var parent = (level == "0") ? null : UI.getJSONValues(data, level-1);
-                var child = (level == UI.maxLevel) ? null : UI.getJSONValues(data, level);
+                var child = (level == (UI.levels.length -1)) ? null : UI.getJSONValues(data, level);
                 var active_taxon = (child ? child['name'] : parent['children'][0]['name']);
                 // update Menu
                 Menu.update(parent, child, level);
@@ -165,40 +168,42 @@ var UI = {
 
     },
     
-    convertFromCartodb: function (data, level) {
-        var rows = data.rows;
+    convertFromCartodb: function (cartoResult, level) {
+        var rows = cartoResult.rows;
         var children = new Array();
         
         //add children
         for(var i = 0; i < rows.length; i++) {
             children[i] = new Object();
-            children[i].id = rows[i][UI.levels[level + 1]];
+            children[i].id = rows[i][UI.levelsId[level + 1]];
             children[i].name = rows[i][UI.levels[level + 1]];
-            children[i].parent = rows[i][UI.levels[level]];
+            children[i].parent = rows[i][UI.levelsId[level]];
         }
         
         //add him
-        var bread = new Object();
-        bread.id = rows[0][UI.levels[level]];
-        bread.name = rows[0][UI.levels[level]];
-        bread.parent = rows[0][UI.levels[level-1]];
-        bread.children = children;
+        var parent = new Object();
+        parent.id = rows[0][UI.levelsId[level]];
+        parent.name = rows[0][UI.levels[level]];
+        parent.parent = rows[0][UI.levelsId[level-1]];
+        parent.children = children;
+        
         //add parents
         for(var j = level -1; j >= 0 ; j--) {
-            bread = UI.addParent(bread, j, rows);
+            parent = UI.addParent(parent, j, rows);
         }         
-        return bread;
+        return parent;
     },
     
-    addParent: function(children, levelId, cartoResult) {
-        var breadcrumb = new Object();
-        var level = UI.levels[levelId];
-        breadcrumb.id = cartoResult[0][level];
-        breadcrumb.name = cartoResult[0][level];
-        breadcrumb.parent = cartoResult[0][UI.levels[levelId-1]];
-        breadcrumb.children = new Array();
-        breadcrumb.children[0] = children;
-        return breadcrumb;
+    addParent: function(children, num, cartoResult) {
+        var parent = new Object();
+        var level = UI.levels[num];
+        var levelId = UI.levelsId[num];
+        parent.id = cartoResult[0][levelId];
+        parent.name = cartoResult[0][level];
+        parent.parent = cartoResult[0][UI.levelsId[levelId-1]];
+        parent.children = new Array();
+        parent.children[0] = children;
+        return parent;
     },
     
     getJSONValues: function (data, level, i) {
@@ -246,9 +251,9 @@ var UI = {
     resizeElements: function(){
 	
         var divMainLeft = document.getElementById("divMainLeft");
-	var hideMainLeft = divMainLeft.style.display == "none";
+        var hideMainLeft = divMainLeft.style.display == "none";
 	
-	var maxHeight = 900;
+        var maxHeight = 900;
         var maxWidth = 1200;
 
         var hMargin = 10;
