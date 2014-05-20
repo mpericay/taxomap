@@ -178,31 +178,30 @@ var UI = {
         
         //add children
         for(var i = 0; i < rows.length; i++) {
-            children[i] = new Object();
-            children[i].id = rows[i][UI.levelsId[level + 1]];
-            children[i].name = rows[i][UI.levels[level + 1]];
-            children[i].parent = rows[i][UI.levelsId[level]];
+            children[i] = UI.convertElement(rows[i], level + 1);
         }
         
-        //add him
-        var parent = new Object();
-        parent.id = rows[0][UI.levelsId[level]];
-        parent.name = rows[0][UI.levels[level]];
-        parent.parent = rows[0][UI.levelsId[level-1]];
-        parent.children = children;
+        //add active taxon
+        var taxon = UI.convertElement(rows[0], level);
+        taxon.children = children;
         
-        //add parents
+        //add parents recursively
         for(var j = level -1; j >= 0 ; j--) {
-            parent = UI.addParent(parent, j, rows);
+            taxon = UI.addParent(taxon, j, rows);
         }         
-        return parent;
+        return taxon;
+    },
+    
+    convertElement: function (row, level) {
+        var el = new Object();
+        el.id = row[UI.levelsId[level]];
+        el.name = row[UI.levels[level]];
+        el.parent = row[UI.levelsId[level-1]]; 
+        return el;
     },
     
     addParent: function(children, num, cartoResult) {
-        var parent = new Object();
-        parent.id = cartoResult[0][UI.levelsId[num]];
-        parent.name = cartoResult[0][UI.levels[num]];
-        parent.parent = cartoResult[0][UI.levelsId[UI.levelsId[num]-1]];
+        var parent = UI.convertElement(cartoResult[0], num);
         parent.children = new Array();
         parent.children[0] = children;
         return parent;
