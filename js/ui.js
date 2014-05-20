@@ -9,7 +9,7 @@ var UI = {
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "species"),
+    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "scientificname"),
     levelsId : new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid"),
 
     initialize: function(){
@@ -110,19 +110,23 @@ var UI = {
     },
 
     setTaxon: function(taxon_id, level){ 
+        
+        level = parseInt(level);
         // make sure that taxon is changing
         if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
 
-        // we select only until parents and immediate children
         var sqlSelect = "";
-        for(var i = 0; i-1 <= level; i++) {
+        // we select only until parents and immediate children (if they exist)
+        for(var i = 0; i <= level+1; i++) {
             if(UI.levels[i]) {
                 if(sqlSelect) sqlSelect += ",";
+                //both levels and levels id
                 sqlSelect += UI.levels[i];
                 sqlSelect += ","+UI.levelsId[i];
             }
         }       
         var sqlWhere = " where " + UI.levelsId[level] + "='" + taxon_id + "'";
+        var sqlOrderBy = " order by " + (UI.levelsId[level+1] ? UI.levelsId[level+1] : UI.levelsId[level]); //order children (if not last level)
         var sqlMap = "select * from mcnb" + sqlWhere;
         
         //change the cartoDB taxon layer
@@ -134,7 +138,7 @@ var UI = {
         // get taxon parents and children
         $.getJSON("http://marti.cartodb.com/api/v2/sql?",
         {
-          q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb "+sqlWhere
+          q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb " + sqlWhere + sqlOrderBy
         },
         function(data){
             if(data && data.total_rows) {
@@ -142,9 +146,9 @@ var UI = {
                     Menu.error(data.msg);
                     return;
                 } 
-                data = UI.convertFromCartodb(data, parseInt(level));
+                data = UI.convertFromCartodb(data, level);
                 
-                var parent = (level == "0") ? null : UI.getJSONValues(data, level-1);
+                var parent = (level == 0) ? null : UI.getJSONValues(data, level-1);
                 var child = (level == (UI.levels.length -1)) ? null : UI.getJSONValues(data, level);
                 var active_taxon = (child ? child['name'] : parent['children'][0]['name']);
                 // update Menu
@@ -196,11 +200,9 @@ var UI = {
     
     addParent: function(children, num, cartoResult) {
         var parent = new Object();
-        var level = UI.levels[num];
-        var levelId = UI.levelsId[num];
-        parent.id = cartoResult[0][levelId];
-        parent.name = cartoResult[0][level];
-        parent.parent = cartoResult[0][UI.levelsId[levelId-1]];
+        parent.id = cartoResult[0][UI.levelsId[num]];
+        parent.name = cartoResult[0][UI.levels[num]];
+        parent.parent = cartoResult[0][UI.levelsId[UI.levelsId[num]-1]];
         parent.children = new Array();
         parent.children[0] = children;
         return parent;
