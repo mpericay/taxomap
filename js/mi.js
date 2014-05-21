@@ -96,11 +96,11 @@ var MI = {
 
 		if(!format) format = "csv";
         
-        var service = MI.cartodbUrl+"q=select * from mcnb where " + UI.levels[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
+        var query = "select * from mcnb where " + UI.levels[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
         if(bbox) {
-            service += " and (the_geom&&ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
+            query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
         }
-        service += "&format=" + format;
+        var service = MI.cartodbUrl + "q=" + encodeURIComponent(query) + "&format=" + format;
         //if(locale) service += "&LANG=" + locale;
 		location.href = service;
     },
