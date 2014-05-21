@@ -46,12 +46,15 @@ var Menu = {
         var data = "";
 
         for(var i=0; i<childArray.length; i++) {
-            data += "<li>";
-            data += "<a href=\"javascript:UI.setTaxon('"+childArray[i]['id']+"',"+level+")\" title=\""+locStrings._generic_activate+" "+childArray[i]['name']+"\">";
-            data += childArray[i]['name'];
-            data += '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>';
-            data+= "</a>";
-            data += "</li>";
+            //if no id, we don't want to show the possibility to go further: there's no information
+            if(childArray[i]['id']) {
+                data += "<li>";
+                data += "<a href=\"javascript:UI.setTaxon('"+childArray[i]['id']+"',"+level+")\" title=\""+locStrings._generic_activate+" "+childArray[i]['name']+"\">";
+                data += childArray[i]['name'];
+                data += '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>';
+                data+= "</a>";
+                data += "</li>";
+            }
         }
 
         return data;

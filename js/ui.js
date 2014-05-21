@@ -9,8 +9,8 @@ var UI = {
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "scientificname"),
-    levelsId : new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid"),
+    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "canonicalname","scientificname"),
+    levelsId : new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid","subspeciesid"),
 
     initialize: function(){
 
