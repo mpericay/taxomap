@@ -24,6 +24,8 @@
 			<li><a id="buttonQuotesCSV" href="#"><?php echo _DOWNLOAD_CSV_FORMAT; ?></a></li>
 			<li><a id="buttonQuotesKML" href="#"><?php echo _DOWNLOAD_KML_FORMAT; ?></a></li>
 			<li><a id="buttonQuotesSHP" href="#"><?php echo _DOWNLOAD_SHP_FORMAT; ?></a></li>
+			<li><a id="buttonQuotesSVG" href="#"><?php echo _DOWNLOAD_SVG_FORMAT; ?></a></li>
+			<li><a id="buttonQuotesGeoJSON" href="#"><?php echo _DOWNLOAD_GEOJSON_FORMAT; ?></a></li>
 		</ul>			
     </div>
 	

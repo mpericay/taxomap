@@ -2,6 +2,7 @@ var MI = {
 
 	highlightedGridName: "Box",
 	cartodbTiles : null,
+	cartodbUrl : "http://marti.cartodb.com/api/v2/sql?",
 
     zoomToPoint: function(latlon,zoomScale){
         var map = eGV.getMap();
@@ -93,18 +94,14 @@ var MI = {
 
     getQuotes: function(bbox, format){
 
-        var map = eGV.getMap();
-		
 		if(!format) format = "csv";
         
-        var service = "php/geoservices/index.php?op=getquotes&level="+UI.active_taxon_level+"&id="+UI.active_taxon_id;
+        var service = MI.cartodbUrl+"q=select * from mcnb where " + UI.levels[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
         if(bbox) {
-            service += "&BBOX=" + bbox; // we include bbox
-            service += "&GRID=";
-            service += (map.getScale() > scale_change ? "" : "detail");
+            service += " and (the_geom&&ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
         }
-        service += "&FORMAT=" + format;
-        if(locale) service += "&LANG=" + locale;
+        service += "&format=" + format;
+        //if(locale) service += "&LANG=" + locale;
 		location.href = service;
     },
 
@@ -216,7 +213,7 @@ var MI = {
                 var cartodbLayer = new OpenLayers.Layer.XYZ(
                         "cartodbLayer",
                         tilesUrl, {
-                          attribution: "MCNB",
+                          attribution: "Museu de Ciències Naturals de Barcelona",
                           sphericalMercator: true,
                           isBaseLayer: false
                         });      

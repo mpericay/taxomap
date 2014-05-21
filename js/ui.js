@@ -85,7 +85,15 @@ var UI = {
 		
 		$("#buttonQuotesSHP").click(function() {
             MI.getQuotes(null, "shp");
-        });		
+        });
+		
+		$("#buttonQuotesSVG").click(function() {
+            MI.getQuotes(null, "svg");
+        });
+		
+		$("#buttonQuotesGeoJSON").click(function() {
+            MI.getQuotes(null, "geoJSON");
+        });
 		
         $('.searchbox').focusout(function () {
         //$(this).prev('label').css('color','#111');
@@ -136,7 +144,7 @@ var UI = {
         Menu.loading();
 
         // get taxon parents and children
-        $.getJSON("http://marti.cartodb.com/api/v2/sql?",
+        $.getJSON(MI.cartodbUrl,
         {
           q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb " + sqlWhere + sqlOrderBy
         },
