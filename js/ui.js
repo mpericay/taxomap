@@ -72,7 +72,8 @@ var UI = {
         });*/
 
         $("#buttonQuotes").click(function() {
-            MI.getQuotes();
+            //MI.getQuotes();
+            window.open(MI.cartodbTable);
         });
 		
 		$("#buttonQuotesCSV").click(function() {
@@ -144,7 +145,7 @@ var UI = {
         Menu.loading();
 
         // get taxon parents and children
-        $.getJSON(MI.cartodbUrl,
+        $.getJSON(MI.cartodbApi,
         {
           q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb " + sqlWhere + sqlOrderBy
         },

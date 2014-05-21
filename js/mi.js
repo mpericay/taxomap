@@ -2,7 +2,8 @@ var MI = {
 
 	highlightedGridName: "Box",
 	cartodbTiles : null,
-	cartodbUrl : "http://marti.cartodb.com/api/v2/sql?",
+	cartodbApi : "http://marti.cartodb.com/api/v2/sql?",
+	cartodbTable: "https://marti.cartodb.com/tables/mcnb",
 
     zoomToPoint: function(latlon,zoomScale){
         var map = eGV.getMap();
@@ -100,7 +101,7 @@ var MI = {
         if(bbox) {
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
         }
-        var service = MI.cartodbUrl + "q=" + encodeURIComponent(query) + "&format=" + format;
+        var service = MI.cartodbApi + "q=" + encodeURIComponent(query) + "&format=" + format;
         //if(locale) service += "&LANG=" + locale;
 		location.href = service;
     },
