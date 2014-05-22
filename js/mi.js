@@ -106,46 +106,50 @@ var MI = {
 		location.href = service;
     },
 
-    getBoundsFromPosition: function(position) {
+    getBoundsFromPosition: function(position, pointBoxInPixels) {
 	
         var bounds;
         var map = eGV.getMap();
         
         if (position instanceof OpenLayers.Bounds) {
             var minXY = map.getLonLatFromPixel(
-                        new OpenLayers.Pixel(position.left, position.bottom));
+                        new OpenLayers.Pixel(position.left, position.top));
             var maxXY = map.getLonLatFromPixel(
-                        new OpenLayers.Pixel(position.right, position.top));
-            bounds = new OpenLayers.Bounds(minXY.lon, minXY.lat,
-                                           maxXY.lon, maxXY.lat);
+                        new OpenLayers.Pixel(position.right, position.bottom));
+            
         // position is a pixel
         } else {
-            var XY = map.getLonLatFromPixel(position);
-            bounds = new OpenLayers.Bounds(XY.lon, XY.lat,
-                                           XY.lon, XY.lat);
+            //convert it to bbox
+            if(pointBoxInPixels) {
+                var minXY = map.getLonLatFromPixel(
+                        new OpenLayers.Pixel(position.x - pointBoxInPixels, position.y - pointBoxInPixels));
+                var maxXY = map.getLonLatFromPixel(
+                        new OpenLayers.Pixel(position.x + pointBoxInPixels, position.y + pointBoxInPixels));                
+            }
+            
         }
+        
+        bounds = new OpenLayers.Bounds(minXY.lon, maxXY.lat, maxXY.lon, minXY.lat);
 
         bounds.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
         return bounds;
     },
 	
-	showHighlightedGrid: function(extent) {
-	
-		if(!extent) return;
-		
-		var map = eGV.getMap();
-		
-		var ext = [extent.minx, extent.miny, extent.maxx, extent.maxy];
-		var boxes  = new OpenLayers.Layer.Boxes(this.highlightedGridName);
-		var bounds = OpenLayers.Bounds.fromArray(ext);
-		bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-		var box = new OpenLayers.Marker.Box(bounds,"#F00", 1);
-		boxes.addMarker(box);
+    showHighlightedGridFromBounds: function(bounds) {
 
-		this.hideHighlightedGrid();
-		map.addLayer(boxes);		
-	
-	},
+        var map = eGV.getMap();
+        if(!map) return;
+        
+        bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+        
+        var boxes  = new OpenLayers.Layer.Boxes(this.highlightedGridName);
+        var box = new OpenLayers.Marker.Box(bounds,"#F00", 1);
+        boxes.addMarker(box);
+
+        this.hideHighlightedGrid();
+        map.addLayer(boxes);        
+    
+    },	
 	
 	hideHighlightedGrid: function() {
 	
@@ -162,29 +166,28 @@ var MI = {
         // we want to keep extension
         UI.position_infobox = position;
 
-        var bounds = this.getBoundsFromPosition(position);
+        var bounds = this.getBoundsFromPosition(position, 20);
         
-        $.getJSON("php/geoservices/index.php?op=getinfobox",
+        $.getJSON(this.cartodbApi,
             {
-            LEVEL: UI.active_taxon_level,
-            ID: UI.active_taxon_id,
-            BBOX: bounds.toBBOX(3,false),
-            GRID: (map.getScale() > scale_change ? "" : "detail")
+            q: "select count(*)," + UI.levelsId[UI.active_taxon_level+1] + " as id," + UI.levels[UI.active_taxon_level+1] + " as name from mcnb where " + UI.levelsId[UI.active_taxon_level] +"='" + UI.active_taxon_id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name"
+            //BBOX: bounds.toBBOX(3,false)
             },
             function(data){
             // parse JSON data
 			if(data) {
-				if(data.status == "success") UI.drawInfoResults(div, data);
+				if(data.status == "success") UI.drawInfoResults(div, data.rows);
 				else div.html(locStrings._infobox_notfound);
-				//highlight grid
-				MI.showHighlightedGrid(data.extent);
 			}
         });
+        
+        // highlight grid
+        this.showHighlightedGridFromBounds(bounds);
     },
     
     loadCartodbLayer: function(sql) {
         
-        MI.cartodbTiles = cartodb.Tiles.getTiles({
+        this.cartodbTiles = cartodb.Tiles.getTiles({
             type: 'cartodb',
             user_name: 'marti',
             sublayers: [{

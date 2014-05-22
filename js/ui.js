@@ -155,6 +155,8 @@ var UI = {
                     Menu.error(data.msg);
                     return;
                 } 
+                
+                // we must convert from cartodb JSON format (rows) to TaxoMap JSON format (children)
                 data = UI.convertFromCartodb(data, level);
                 
                 var parent = (level == 0) ? null : UI.getJSONValues(data, level-1);
