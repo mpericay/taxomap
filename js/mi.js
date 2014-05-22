@@ -170,13 +170,13 @@ var MI = {
         
         $.getJSON(this.cartodbApi,
             {
-            q: "select count(*)," + UI.levelsId[UI.active_taxon_level+1] + " as id," + UI.levels[UI.active_taxon_level+1] + " as name from mcnb where " + UI.levelsId[UI.active_taxon_level] +"='" + UI.active_taxon_id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name"
+            q: "select count(*)," + UI.levelsId[UI.active_taxon_level+1] + " as id," + UI.levels[UI.active_taxon_level+1] + " as name from mcnb where " + UI.levelsId[UI.active_taxon_level] +"='" + UI.active_taxon_id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
             //BBOX: bounds.toBBOX(3,false)
             },
             function(data){
             // parse JSON data
 			if(data) {
-				if(data.status == "success") UI.drawInfoResults(div, data.rows);
+				if(data.total_rows) UI.drawInfoResults(div, data);
 				else div.html(locStrings._infobox_notfound);
 			}
         });

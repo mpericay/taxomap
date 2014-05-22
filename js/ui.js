@@ -747,24 +747,36 @@ var UI = {
      },
 
     drawInfoResults: function(div, childArray){
-        var level = parseInt(childArray['level']); // must be a number!
-        var data = "<ul><li";
-        data += " class='main' id='mainInfoLine'";
-        data += "><a href=\"javascript:UI.setTaxon('"+childArray['id']+"','"+level+"')\">" + childArray['name'] + "</a>";
-        if(childArray['value']) data += ": " + childArray['value'];
-        //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
-		data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";
-		data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li></ul>";
-        data += "</li>";
-        if(childArray['children']) {
-                for(var k=0; k<childArray['children'].length; k++) {
-                    data += "<li><a href=\"javascript:UI.setTaxon('"+childArray['children'][k]['id']+"','"+(level+1)+"')\"";
-                    data += "title=\""+locStrings._generic_activate+" "+childArray['children'][k]['name']+"\"";
-                    data +=">" + childArray['children'][k]['name'] + "</a>";
-                    if(childArray['children'][k]['value']) data += ": " + childArray['children'][k]['value'];
-                    data += "</li>";
+        var level = parseInt(UI.active_taxon_level); // must be a number!
+        
+        var children= "";
+        var totalCount= 0;
+
+        if(childArray.rows) {
+                for(var k=0; k<childArray.rows.length; k++) {
+                    children += "<li><a href=\"javascript:UI.setTaxon('"+childArray.rows[k]['id']+"','"+(level+1)+"')\"";
+                    children += "title=\""+locStrings._generic_activate+" "+childArray.rows[k]['name']+"\"";
+                    children +=">" + childArray.rows[k]['name'] + "</a>";
+                    var count = childArray.rows[k]['count'];
+                    if(count) {
+                        children += ": " + count;
+                        totalCount += parseInt(count);
+                    }
+                    children += "</li>";
                 }
         }
+        
+        var data = "<ul><li";
+        data += " class='main' id='mainInfoLine'";
+        data += "><a href=\"javascript:UI.setTaxon('"+UI.active_taxon_level+"','"+level+"')\">" + UI.active_taxon_name + "</a>";
+        data += ": " + totalCount;
+        //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
+        data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";
+        data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li></ul>";
+        data += "</li>";
+        
+        data += children;
+        
         data += "</ul>";
         div.html(data);
 		
