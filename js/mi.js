@@ -1,6 +1,8 @@
 var MI = {
 
 	highlightedGridName: "Box",
+	infoboxBounds: null,
+	infoboxPixels: 20,
 	cartodbTiles : null,
 	cartodbApi : "http://marti.cartodb.com/api/v2/sql?",
 	cartodbTable: "https://marti.cartodb.com/tables/mcnb",
@@ -97,16 +99,21 @@ var MI = {
 
 		if(!format) format = "csv";
         
-        var query = "select * from mcnb where " + UI.levels[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
+        var query = "select * from mcnb where " + UI.levelsId[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
         if(bbox) {
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
         }
         var service = MI.cartodbApi + "q=" + encodeURIComponent(query) + "&format=" + format;
         //if(locale) service += "&LANG=" + locale;
-		location.href = service;
+		return service;
+    },
+    
+    downloadQuotes:function(format) {
+        var service = this.getQuotes(this.getBoundsFromPosition(this.infoboxBounds), format);
+        location.href = service;
     },
 
-    getBoundsFromPosition: function(position, pointBoxInPixels) {
+    getBoundsFromPosition: function(position) {
 	
         var bounds;
         var map = eGV.getMap();
@@ -120,12 +127,10 @@ var MI = {
         // position is a pixel
         } else {
             //convert it to bbox
-            if(pointBoxInPixels) {
-                var minXY = map.getLonLatFromPixel(
-                        new OpenLayers.Pixel(position.x - pointBoxInPixels, position.y - pointBoxInPixels));
-                var maxXY = map.getLonLatFromPixel(
-                        new OpenLayers.Pixel(position.x + pointBoxInPixels, position.y + pointBoxInPixels));                
-            }
+            var minXY = map.getLonLatFromPixel(
+                    new OpenLayers.Pixel(position.x - this.infoboxPixels, position.y - this.infoboxPixels));
+            var maxXY = map.getLonLatFromPixel(
+                    new OpenLayers.Pixel(position.x + this.infoboxPixels, position.y + this.infoboxPixels));                
             
         }
         
@@ -135,11 +140,12 @@ var MI = {
         return bounds;
     },
 	
-    showHighlightedGridFromBounds: function(bounds) {
+    showHighlightedGridFromBounds: function(boundsLatLon) {
 
         var map = eGV.getMap();
         if(!map) return;
         
+        var bounds = boundsLatLon.clone();
         bounds.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
         
         var boxes  = new OpenLayers.Layer.Boxes(this.highlightedGridName);
@@ -164,9 +170,9 @@ var MI = {
         var map = eGV.getMap();
 
         // we want to keep extension
-        UI.position_infobox = position;
+        this.infoboxBounds = position;
 
-        var bounds = this.getBoundsFromPosition(position, 20);
+        var bounds = this.getBoundsFromPosition(position);
         
         $.getJSON(this.cartodbApi,
             {

@@ -171,7 +171,7 @@ var UI = {
                 UI.active_taxon_level = level;
                 UI.active_taxon_name = active_taxon;
 
-                if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(UI.position_infobox);
+                if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(MI.infoboxBounds);
                 
             } else {
                 Menu.error();
@@ -789,19 +789,19 @@ var UI = {
         this.buildDropdownMenu("infoButton");
 		
 		$("#infoButton").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox));
+            MI.downloadQuotes();
         });
 		
 		$("#infoQuotesCSV").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "csv");
+		    MI.downloadQuotes("csv");
         });
 		
 		$("#infoQuotesKML").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "kml");
+		    MI.downloadQuotes("kml");
         });		
 		
 		$("#infoQuotesSHP").click(function() {
-            MI.getQuotes(MI.getBoundsFromPosition(UI.position_infobox), "shp");
+		    MI.downloadQuotes("shp");
         });			
     },
     
