@@ -214,7 +214,7 @@ var MI = {
                 var cartodbLayer = new OpenLayers.Layer.XYZ(
                         "cartodbLayer",
                         tilesUrl, {
-                          attribution: "Museu de Ciències Naturals de Barcelona",
+                          attribution: "(ODbL) Museu de Ciències Naturals de Barcelona",
                           sphericalMercator: true,
                           isBaseLayer: false
                         });      
@@ -231,8 +231,16 @@ var MI = {
                       );
                         
                 // add to the map
-                //map.addLayer(cartodbLayer);
                 map.addConnection(egvConnCarto);
+                
+                // add transparency control (must be created after layer)
+                var transControl = new eGV.Control.Transparency({
+                    id:"controlTransparency",
+                    minOpacity:0.2,
+                    defaultOpacity:0.9,
+                    connections: [egvConnCarto]
+                });
+                eGV.addControl(transControl);                
                 
             } else {
                 var cartodbLayer = map.getLayersByName("cartodbLayer")[0];                

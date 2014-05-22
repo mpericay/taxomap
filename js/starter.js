@@ -52,7 +52,7 @@ function initialize(){
     var egvConnOSM = [
 
         egvConnOSM1 = new eGV.Connection(
-            "OSM - Aerial",
+            "OSM Aerial",
             baseAerial,
                 {
                 "id":"OSMAerial",
@@ -127,18 +127,6 @@ function initialize(){
 
     toolBar.addControls(controls);
     //toolBar.getControl("infoControl").events.register("actionend", UI, UI.displayInfoSectionDiv);
-    
-    var transparencyConnections = [
-      map.getConnection("cartodb")
-    ];
-
-    /*var transControl = new eGV.Control.Transparency({
-        id:"controlTransparency",
-        minOpacity:0.2,
-        defaultOpacity:0.8,
-        connections:transparencyConnections
-    });
-    eGV.addControl(transControl);*/
 
     var baseLayers = egvConnOSM;
 

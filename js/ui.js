@@ -138,7 +138,7 @@ var UI = {
         var sqlOrderBy = " order by " + (UI.levelsId[level+1] ? UI.levelsId[level+1] : UI.levelsId[level]); //order children (if not last level)
         var sqlMap = "select * from mcnb" + sqlWhere;
         
-        //change the cartoDB taxon layer
+        //add/change the cartoDB taxon layer
         MI.loadCartodbLayer(sqlMap);
 
         //loading while AJAX request
