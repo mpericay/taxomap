@@ -101,15 +101,11 @@ var MI = {
         
         var query = "select * from mcnb where " + UI.levelsId[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
         if(bbox) {
+            bbox = this.getBoundsFromPosition(this.infoboxBounds);
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
         }
         var service = MI.cartodbApi + "q=" + encodeURIComponent(query) + "&format=" + format;
         //if(locale) service += "&LANG=" + locale;
-		return service;
-    },
-    
-    downloadQuotes:function(format) {
-        var service = this.getQuotes(this.getBoundsFromPosition(this.infoboxBounds), format);
         location.href = service;
     },
 

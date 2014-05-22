@@ -77,23 +77,23 @@ var UI = {
         });
 		
 		$("#buttonQuotesCSV").click(function() {
-            MI.getQuotes(null, "csv");
+            MI.getQuotes(false, "csv");
         });
 		
 		$("#buttonQuotesKML").click(function() {
-            MI.getQuotes(null, "kml");
+            MI.getQuotes(false, "kml");
         });
 		
 		$("#buttonQuotesSHP").click(function() {
-            MI.getQuotes(null, "shp");
+            MI.getQuotes(false, "shp");
         });
 		
 		$("#buttonQuotesSVG").click(function() {
-            MI.getQuotes(null, "svg");
+            MI.getQuotes(false, "svg");
         });
 		
 		$("#buttonQuotesGeoJSON").click(function() {
-            MI.getQuotes(null, "geoJSON");
+            MI.getQuotes(false, "geoJSON");
         });
 		
         $('.searchbox').focusout(function () {
@@ -789,19 +789,19 @@ var UI = {
         this.buildDropdownMenu("infoButton");
 		
 		$("#infoButton").click(function() {
-            MI.downloadQuotes();
+            MI.getQuotes(true);
         });
 		
 		$("#infoQuotesCSV").click(function() {
-		    MI.downloadQuotes("csv");
+		    MI.getQuotes(true,"csv");
         });
 		
 		$("#infoQuotesKML").click(function() {
-		    MI.downloadQuotes("kml");
+		    MI.getQuotes(true,"kml");
         });		
 		
 		$("#infoQuotesSHP").click(function() {
-		    MI.downloadQuotes("shp");
+		    MI.getQuotes(true,"shp");
         });			
     },
     
