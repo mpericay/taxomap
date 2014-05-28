@@ -169,10 +169,11 @@ var MI = {
         this.infoboxBounds = position;
 
         var bounds = this.getBoundsFromPosition(position);
+        var childrenLevel = (UI.taxon.levels[UI.taxon.level+1]) ? UI.taxon.level + 1 : UI.taxon.level;
         
         $.getJSON(this.cartodbApi,
             {
-            q: "select count(*)," + UI.taxon.levelsId[UI.taxon.level+1] + " as id," + UI.taxon.levels[UI.taxon.level+1] + " as name from mcnb where " + UI.taxon.levelsId[UI.taxon.level] +"='" + UI.taxon.id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
+            q: "select count(*)," + UI.taxon.levelsId[childrenLevel] + " as id," + UI.taxon.levels[childrenLevel] + " as name from mcnb where " + UI.taxon.levelsId[UI.taxon.level] +"='" + UI.taxon.id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
             //BBOX: bounds.toBBOX(3,false)
             },
             function(data){

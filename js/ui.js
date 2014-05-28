@@ -692,7 +692,7 @@ var UI = {
 
         if(childArray.rows) {
                 for(var k=0; k<childArray.rows.length; k++) {
-                    if(childArray.rows[k]['id']) {
+                    if(childArray.rows[k]['id'] && UI.taxon.levelsId[level+1]) {
                         children += "<li><a href=\"javascript:UI.setTaxon('"+childArray.rows[k]['id']+"','"+(level+1)+"')\"";
                         children += "title=\""+locStrings._generic_activate+" "+childArray.rows[k]['name']+"\"";
                         children +=">" + childArray.rows[k]['name'] + "</a>";
@@ -708,8 +708,15 @@ var UI = {
         
         var data = "<ul><li";
         data += " class='main' id='mainInfoLine'";
-        data += "><a href=\"javascript:UI.setTaxon('"+UI.taxon.level+"','"+level+"')\">" + this.taxon.getName() + "</a>";
-        data += ": " + totalCount;
+        data += "><a href=\"javascript:UI.setTaxon('"+UI.taxon.id+"','"+level+"')\">" + this.taxon.getName() + "</a>";
+        
+        if(totalCount) {
+          //there are children
+            data += ": " + totalCount;
+        } else {
+            // no children (last level): first row gives count
+            data += ": " + childArray.rows[0]['count'];
+        }
         //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
         data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";
         data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li></ul>";
