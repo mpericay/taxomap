@@ -16,9 +16,11 @@ var Menu = {
         $("#taxon-list").html(data);
     },
 
-    update: function(parent, child, level) {
-        level = parseInt(level);// must be a number!
-        Menu.direction = (level > UI.active_taxon_level) ? "right" : "left";
+    update: function(taxon) {
+        var parent = taxon.getParent();
+        var child = taxon.getChild();
+        var level = taxon.level;
+        Menu.direction = (UI.taxon && (level > UI.taxon.level)) ? "right" : "left";
         $("#taxon-list ul").menu19("destroy");
 
         $("#taxon-list").html("<ul></ul>");

@@ -80,6 +80,7 @@ $locStrings = buildClientStrings();
             var cartodbTiles;
         </script>
 
+        <script type="text/javascript" src="js/taxon.js"></script>
         <script type="text/javascript" src="js/ui.js"></script>
         <script type="text/javascript" src="js/menu.js"></script>
         <script type="text/javascript" src="js/starter.js"></script>

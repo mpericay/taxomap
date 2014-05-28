@@ -2,15 +2,11 @@ var UI = {
 
     modalHelpWidth: 580,
 	modalWidth: 600,
-    active_taxon_id: null,
-    active_taxon_level: null,
-    active_taxon_name: null,
+    taxon: null,
     position_infobox: null,
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
-    levels : new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "canonicalname","scientificname"),
-    levelsId : new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid","subspeciesid"),
 
     initialize: function(){
 
@@ -33,7 +29,7 @@ var UI = {
 		this.createAboutDiv();
 
         // create taxo search
-        this.createTaxoSearch();
+        //this.createTaxoSearch();
 
         //Register events
         this.registerEvents();
@@ -120,26 +116,15 @@ var UI = {
 
     setTaxon: function(taxon_id, level){ 
         
-        level = parseInt(level);
         // make sure that taxon is changing
-        if(taxon_id == UI.active_taxon_id && level == UI.active_taxon_level) return;
-
-        var sqlSelect = "";
-        // we select only until parents and immediate children (if they exist)
-        for(var i = 0; i <= level+1; i++) {
-            if(UI.levels[i]) {
-                if(sqlSelect) sqlSelect += ",";
-                //both levels and levels id
-                sqlSelect += UI.levels[i];
-                sqlSelect += ","+UI.levelsId[i];
-            }
-        }       
-        var sqlWhere = " where " + UI.levelsId[level] + "='" + taxon_id + "'";
-        var sqlOrderBy = " order by " + (UI.levelsId[level+1] ? UI.levelsId[level+1] : UI.levelsId[level]); //order children (if not last level)
-        var sqlMap = "select * from mcnb" + sqlWhere;
+        if(UI.taxon) {
+            if(taxon_id == UI.taxon.id && level == UI.taxon.level) return;
+        }
         
+        var newTaxon = new Taxon(taxon_id, level);
+
         //add/change the cartoDB taxon layer
-        MI.loadCartodbLayer(sqlMap);
+        MI.loadCartodbLayer("select * from mcnb" + newTaxon.getSqlWhere());
 
         //loading while AJAX request
         Menu.loading();
@@ -147,7 +132,7 @@ var UI = {
         // get taxon parents and children
         $.getJSON(MI.cartodbApi,
         {
-          q: "SELECT DISTINCT "+sqlSelect+" FROM mcnb " + sqlWhere + sqlOrderBy
+          q: "SELECT DISTINCT "+newTaxon.getSqlSelect()+" FROM mcnb " + newTaxon.getSqlWhere() + newTaxon.getSqlOrderBy()
         },
         function(data){
             if(data && data.total_rows) {
@@ -156,20 +141,14 @@ var UI = {
                     return;
                 } 
                 
-                // we must convert from cartodb JSON format (rows) to TaxoMap JSON format (children)
-                data = UI.convertFromCartodb(data, level);
-                
-                var parent = (level == 0) ? null : UI.getJSONValues(data, level-1);
-                var child = (level == (UI.levels.length -1)) ? null : UI.getJSONValues(data, level);
-                var active_taxon = (child ? child['name'] : parent['children'][0]['name']);
-                // update Menu
-                Menu.update(parent, child, level);
-                
-                $("#divBreadcrumb").html(UI.drawBreadcrumb(data,0, level));
-
-                UI.active_taxon_id = taxon_id;
-                UI.active_taxon_level = level;
-                UI.active_taxon_name = active_taxon;
+                // we must convert from cartodb JSON format (rows) to TaxoMap JSON format (children objects)
+                newTaxon.convertFromCartodb(data);
+               // update Menu
+                Menu.update(newTaxon);
+                //create breadcrumb
+                $("#divBreadcrumb").html(UI.drawBreadcrumb(newTaxon.tree,0, newTaxon.level));
+                //update taxon
+                UI.taxon = newTaxon;
 
                 if($("#divInfoDialog").dialog("isOpen") === true) UI.showInfo(MI.infoboxBounds);
                 
@@ -183,47 +162,6 @@ var UI = {
 
     },
     
-    convertFromCartodb: function (cartoResult, level) {
-        var rows = cartoResult.rows;
-        var children = new Array();
-        
-        //add children
-        for(var i = 0; i < rows.length; i++) {
-            children[i] = UI.convertElement(rows[i], level + 1);
-        }
-        
-        //add active taxon
-        var taxon = UI.convertElement(rows[0], level);
-        taxon.children = children;
-        
-        //add parents recursively
-        for(var j = level -1; j >= 0 ; j--) {
-            taxon = UI.addParent(taxon, j, rows);
-        }         
-        return taxon;
-    },
-    
-    convertElement: function (row, level) {
-        var el = new Object();
-        el.id = row[UI.levelsId[level]];
-        el.name = row[UI.levels[level]];
-        el.parent = row[UI.levelsId[level-1]]; 
-        return el;
-    },
-    
-    addParent: function(children, num, cartoResult) {
-        var parent = UI.convertElement(cartoResult[0], num);
-        parent.children = new Array();
-        parent.children[0] = children;
-        return parent;
-    },
-    
-    getJSONValues: function (data, level, i) {
-       if(!i) i = 0;
-       if(level == i) return data;
-       else return UI.getJSONValues(data['children'][0], level, i+1);
-    },
-
     refreshLegend: function() {
         // if we need different legends for different levels or detail
         $("#divLegend").html("<img src='"+serverURL+"/taxomap/img/legends/"+locale+".png' />");
@@ -659,27 +597,27 @@ var UI = {
          if(!div) var div = $("#divSheetModal");
          
          div.dialog("open");
-         div.dialog("option", "title", UI.active_taxon_name);
+         div.dialog("option", "title", this.taxon.getName());
          
-         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
-         //var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=query&prop=text&section=0&format=json&page="+ UI.active_taxon_name + "&contentformat=text%2Fx-wiki&redirects=";
+         var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&prop=text&section=0&format=json&page="+ this.taxon.getName() + "&contentformat=text%2Fx-wiki&redirects=";
+         //var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=query&prop=text&section=0&format=json&page="+ this.taxon.getName() + "&contentformat=text%2Fx-wiki&redirects=";
              
          $.getJSON(wiki_url+"&callback=?", //for JSONP
             {
                 //additional params
-                //ID: UI.active_taxon_id
+                //ID: UI.taxon.id
             },
             function(data){
             // parse JSON data
                 if(data.parse) UI.drawWikiSheet(div, data);
                 else {
                     div.find("#title").html(locStrings._no_results_found);
-                    div.find("#desc").html(locStrings._no_results_found +" "+UI.active_taxon_name+ " " + locStrings._at_wikipedia);
+                    div.find("#desc").html(locStrings._no_results_found +" "+UI.taxon.getName()+ " " + locStrings._at_wikipedia);
                     div.find("#subtitle").hide();
                 }
                 div.find("#content").show();
                 div.find("#loading").hide();
-                UI.drawLinksSheet(div, UI.active_taxon_name);
+                UI.drawLinksSheet(div, UI.taxon.getName());
         });
              
 
@@ -747,28 +685,30 @@ var UI = {
      },
 
     drawInfoResults: function(div, childArray){
-        var level = parseInt(UI.active_taxon_level); // must be a number!
+        var level = parseInt(UI.taxon.level); // must be a number!
         
         var children= "";
         var totalCount= 0;
 
         if(childArray.rows) {
                 for(var k=0; k<childArray.rows.length; k++) {
-                    children += "<li><a href=\"javascript:UI.setTaxon('"+childArray.rows[k]['id']+"','"+(level+1)+"')\"";
-                    children += "title=\""+locStrings._generic_activate+" "+childArray.rows[k]['name']+"\"";
-                    children +=">" + childArray.rows[k]['name'] + "</a>";
-                    var count = childArray.rows[k]['count'];
-                    if(count) {
-                        children += ": " + count;
-                        totalCount += parseInt(count);
+                    if(childArray.rows[k]['id']) {
+                        children += "<li><a href=\"javascript:UI.setTaxon('"+childArray.rows[k]['id']+"','"+(level+1)+"')\"";
+                        children += "title=\""+locStrings._generic_activate+" "+childArray.rows[k]['name']+"\"";
+                        children +=">" + childArray.rows[k]['name'] + "</a>";
+                        var count = childArray.rows[k]['count'];
+                        if(count) {
+                            children += ": " + count;
+                            totalCount += parseInt(count);
+                        }
+                        children += "</li>";
                     }
-                    children += "</li>";
                 }
         }
         
         var data = "<ul><li";
         data += " class='main' id='mainInfoLine'";
-        data += "><a href=\"javascript:UI.setTaxon('"+UI.active_taxon_level+"','"+level+"')\">" + UI.active_taxon_name + "</a>";
+        data += "><a href=\"javascript:UI.setTaxon('"+UI.taxon.level+"','"+level+"')\">" + this.taxon.getName() + "</a>";
         data += ": " + totalCount;
         //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
         data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";

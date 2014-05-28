@@ -99,7 +99,7 @@ var MI = {
 
 		if(!format) format = "csv";
         
-        var query = "select * from mcnb where " + UI.levelsId[UI.active_taxon_level] + "='"+UI.active_taxon_id+"'";
+        var query = "select * from mcnb where " + UI.taxon.levelsId[UI.taxon.level] + "='"+UI.taxon.id+"'";
         if(bbox) {
             bbox = this.getBoundsFromPosition(this.infoboxBounds);
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
@@ -172,7 +172,7 @@ var MI = {
         
         $.getJSON(this.cartodbApi,
             {
-            q: "select count(*)," + UI.levelsId[UI.active_taxon_level+1] + " as id," + UI.levels[UI.active_taxon_level+1] + " as name from mcnb where " + UI.levelsId[UI.active_taxon_level] +"='" + UI.active_taxon_id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
+            q: "select count(*)," + UI.taxon.levelsId[UI.taxon.level+1] + " as id," + UI.taxon.levels[UI.taxon.level+1] + " as name from mcnb where " + UI.taxon.levelsId[UI.taxon.level] +"='" + UI.taxon.id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
             //BBOX: bounds.toBBOX(3,false)
             },
             function(data){
