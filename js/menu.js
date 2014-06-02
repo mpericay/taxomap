@@ -11,7 +11,7 @@ var Menu = {
         var data = "<div class='error'>";
         data += locStrings._error_msg;
         if(message) data += ":<br>" + message;
-        data += "<br><a href='mcnb.php'>" + locStrings._error_back + "</a>";
+        data += "<br><a href='taxomap.php'>" + locStrings._error_back + "</a>";
         data += "</div>";
         $("#taxon-list").html(data);
     },

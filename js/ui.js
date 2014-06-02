@@ -137,7 +137,7 @@ var UI = {
         function(data){
             if(data && data.total_rows) {
                 if(data.error) {
-                    Menu.error(data.msg);
+                    Menu.error(data.error);
                     return;
                 } 
                 
