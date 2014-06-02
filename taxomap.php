@@ -77,7 +77,6 @@ $locStrings = buildClientStrings();
                 var initial_view = false;
             <? } ?>
 
-            var cartodbTiles;
         </script>
 
         <script type="text/javascript" src="js/taxon.js"></script>

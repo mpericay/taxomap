@@ -130,7 +130,7 @@ var UI = {
         Menu.loading();
 
         // get taxon parents and children
-        $.getJSON(MI.cartodbApi,
+        $.getJSON(MI.cartodbApi + "callback=?", //for JSONP
         {
           q: "SELECT DISTINCT "+newTaxon.getSqlSelect()+" FROM mcnb " + newTaxon.getSqlWhere() + newTaxon.getSqlOrderBy()
         },
@@ -155,10 +155,7 @@ var UI = {
             } else {
                 Menu.error();
             }
-        });
-
-        // refresh legend? no need, they are all the same
-        //this.refreshLegend();
+        }).error(function(jqXHR, textStatus, errorThrown) { Menu.error(); });
 
     },
     
