@@ -18,9 +18,9 @@ The museum supports several data portals that aggregate biodiversity information
     </ul>
 	
     <h3>Application powered by</h3>
-    <p>Version 1.0: Geodata Sistemes S.L <a href="http://www.geodata.es" target="_blank" title="Go to Geodata web">www.geodata.es</a><br/>
-    Version 1.1 and later ones: Martí Pericay</p>
-    <p>Taxo&amp;Map is an open source project. All components (PostgreSQL/PostGIS, Mapserver, OpenLayers) including the application (<a href="https://github.com/mpericay/taxomap" target="_blank">https://github.com/mpericay/taxomap</a>) are open source.</p>
+    <p>Version 1.0: Geodata Sistemes S.L <a href="http://www.geodata.es" target="_blank" title="Go to Geodata website">www.geodata.es</a><br/>
+    Versions 1.1 to 3.0: Martí Pericay <a href="http://www.pericay.com" target="_blank" title="Go to Martí Pericay website">www.pericay.com</a></p>
+    <p>Taxo&amp;Map is an open source project. All components (PostgreSQL/PostGIS, CartoDB, OpenLayers) including the application (<a href="https://github.com/mpericay/taxomap" target="_blank">https://github.com/mpericay/taxomap</a>) are open source.</p>
 	
 	<h3>Contact related to the project</h3>
     <p>Francesc Uribe<br/>Natural Science Museum of Barcelona<br/>furibe@bcn.cat</p>
