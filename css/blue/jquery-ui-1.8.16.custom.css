@@ -375,7 +375,7 @@
 }
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
-	font-weight: normal;
+	/*font-weight: normal;*/
 	margin: -1px;
 }
 /*

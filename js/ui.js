@@ -716,7 +716,7 @@ var UI = {
         }
         //data += "<a id='infoLink' title='"+locStrings._download_selected_title+"'><span>" + locStrings._generic_download + " <img src='img/fletxa.png' /></span></a>";
         data += "<div id='divInfoButton' class='infoLink'><button id='infoButton' title='"+locStrings._download_selected_title+"'>" + locStrings._generic_download + "</button><button id='infoQuotesSelect'>format</button></div>";
-        data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li></ul>";
+        data += "<ul class='infoLink'><li><a id='infoQuotesCSV' href='#'>"+locStrings._download_csv_format+"</a></li><li><a id='infoQuotesKML' href='#'>"+locStrings._download_kml_format+"</a></li><li><a id='infoQuotesSHP' href='#'>"+locStrings._download_shp_format+"</a></li><li><a id='infoQuotesSVG' href='#'>"+locStrings._download_svg_format+"</a></li><li><a id='infoQuotesGeoJSON' href='#'>"+locStrings._download_geojson_format+"</a></li></ul>";
         data += "</li>";
         
         data += children;
@@ -746,7 +746,15 @@ var UI = {
 		
 		$("#infoQuotesSHP").click(function() {
 		    MI.getQuotes(true,"shp");
-        });			
+        });
+		
+        $("#infoQuotesSVG").click(function() {
+            MI.getQuotes(true,"svg");
+        });
+        
+        $("#infoQuotesGeoJSON").click(function() {
+            MI.getQuotes(true,"geojson");
+        });        
     },
     
     displaySlideBar: function(){

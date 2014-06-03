@@ -444,13 +444,13 @@ select {
 
 .ui-menu {
     margin-bottom: 12em !important;
-    width: 170px;
     font-weight: bold;
     margin: 20px 10px !important;
 }
 
 #taxon-list .ui-menu {
     border: 0;
+    width: 170px;
 }
 
 .ui-menu .menuTitle, .ui-menu .menuBack {
