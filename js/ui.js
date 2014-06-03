@@ -671,7 +671,7 @@ var UI = {
          //remove references errors
          $('#desc .mw-ext-cite-error').remove();
          //remove disambiguations 
-         //$('#desc .dablink').remove();
+         $('#desc .noprint').remove();
 
      },
      
