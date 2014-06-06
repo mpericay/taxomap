@@ -69,18 +69,7 @@ function initialize(){
                 "title":locStrings._map,
     			"visible": false
             }
-            )/*,
-            //GBIF LAYER TEST: delete this!
-            egvConnGBIF = new eGV.Connection(
-                    "GBIF-Mammalia",
-                    gbifLayer,
-                        {
-                        "id":"GBIFLayer",
-                        "title":"GBIFLayer",
-                        "visible": true,
-                        "isBaseLayer": false
-                    }
-                )*/            
+            )           
     ];
 
     map.addConnections(egvConnOSM);

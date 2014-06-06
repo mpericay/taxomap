@@ -3,7 +3,6 @@ var UI = {
     modalHelpWidth: 580,
 	modalWidth: 600,
     taxon: null,
-    position_infobox: null,
     dialogHeight: 153,
     dialogWidth: 180,
     dialogHeightMinimized: 30,
@@ -64,7 +63,6 @@ var UI = {
         });		
 
         $("#buttonQuotes").click(function() {
-            //MI.getQuotes();
             window.open(MI.cartodbTable);
         });
 		
@@ -89,7 +87,6 @@ var UI = {
         });
 		
         $('.searchbox').focusout(function () {
-        //$(this).prev('label').css('color','#111');
         if ($(this).attr('value') == '') {
         $(this).prev('label').show();
         }
@@ -166,7 +163,7 @@ var UI = {
         data += "<a href=\"javascript:UI.setTaxon('"+childArray['id']+"',"+level+")\"";
         if(level < maxlevel) data += "title=\""+locStrings._generic_activate+" "+childArray['name']+"\"";
         data += ">" + childArray['name'] + "</a>";
-        //var data = "<a href='#'>" + childArray['name'] + "</a>";
+
         if(childArray['children'] && (level < maxlevel)) {
                 data += " > ";
                 for(var k=0; k<childArray['children'].length; k++) {
@@ -418,7 +415,7 @@ var UI = {
             source: function(request, response) {
                 var sqlQuery = UI.taxon.getSqlSearch(request.term);
                 
-                $.getJSON(MI.cartodbApi, //+ "callback=?", //for JSONP
+                $.getJSON(MI.cartodbApi + "callback=?", //for JSONP
                 {
                   q: sqlQuery
                 }, function(data) {
@@ -606,7 +603,6 @@ var UI = {
          div.dialog("option", "title", this.taxon.getName());
          
          var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=parse&prop=text&section=0&format=json&page="+ this.taxon.getName() + "&contentformat=text%2Fx-wiki&redirects=";
-         //var wiki_url = "http://" + locale + ".wikipedia.org/w/api.php?action=query&prop=text&section=0&format=json&page="+ this.taxon.getName() + "&contentformat=text%2Fx-wiki&redirects=";
              
          $.getJSON(wiki_url+"&callback=?", //for JSONP
             {
