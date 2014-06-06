@@ -4,8 +4,8 @@ function Taxon (id, level) {
     this.level = (parseInt(level));
     this.name = null;
     this.tree = null;
-    this.levels = new Array("domainid", "kingdom", "phylum", "class", "_order", "family", "genus", "canonicalname","scientificname");
-    this.levelsId = new Array("domainid", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid","subspeciesid");
+    this.levels = new Array("domain", "kingdom", "phylum", "class", "_order", "family", "genus", "canonicalname","scientificname");
+    this.levelsId = new Array("domain", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid","subspeciesid");
 }
 
 Taxon.prototype.getSqlSelect = function() {
@@ -93,4 +93,21 @@ Taxon.prototype.getName = function() {
         var parent = this.getParent();
         return parent['children'][0]['name'];
     }
-}
+};
+
+Taxon.prototype.getSqlSearch = function(term) {
+    var sqlSelect = "";
+    // we select all levels except last
+    var maxLevel = this.levels.length - 1;
+    for(var i = 0; i < maxLevel; i++) {
+        if(sqlSelect) sqlSelect += " UNION ";
+        //both levels and levels id
+        sqlSelect += "SELECT DISTINCT " + this.levels[i] + " AS label";
+        sqlSelect += "," + this.levelsId[i] + " AS id,";
+        sqlSelect += i + " AS level";
+        sqlSelect += " FROM mcnb WHERE UPPER(" + this.levels[i] + ") LIKE UPPER('" + term + "%')";       
+    }
+    sqlSelect += " ORDER BY label"
+    
+    return sqlSelect;
+};

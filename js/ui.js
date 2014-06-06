@@ -29,7 +29,7 @@ var UI = {
 		this.createAboutDiv();
 
         // create taxo search
-        //this.createTaxoSearch();
+        this.createTaxoSearch();
 
         //Register events
         this.registerEvents();
@@ -62,10 +62,6 @@ var UI = {
         $("#aAbout").bind("click", function() {
             UI.showModal("About");
         });		
-
-        /*$("#buttonSheet").click(function() {
-            UI.showSheet($("#divSheetModal"));
-        });*/
 
         $("#buttonQuotes").click(function() {
             //MI.getQuotes();
@@ -417,23 +413,36 @@ var UI = {
 
     createTaxoSearch: function(){
 		$( "#taxon" ).autocomplete({
-                        b: 300,
-			source: "php/geoservices/index.php?op=searchbyname",
-			minLength: 3,
+            b: 300,
+            minLength: 3,
+            source: function(request, response) {
+                var sqlQuery = UI.taxon.getSqlSearch(request.term);
+                
+                $.getJSON(MI.cartodbApi, //+ "callback=?", //for JSONP
+                {
+                  q: sqlQuery
+                }, function(data) {
+                    if(data.total_rows == 0) {
+                        var msg = "No s'ha trobat: " + request.term;
+                        response([{label: msg, value: msg}]);
+                    }
+                    else response(data.rows);
+                });                
+            },
 			select: function( event, ui ) {
-                                // no results found
-                                if(!ui.item.id) {
-                                    // we prevent the value to be displayed on input
-                                    event.preventDefault();
-                                    return;
-                                }
+                // no results found
+                if(!ui.item.id) {
+                    // we prevent the value to be displayed on input
+                    event.preventDefault();
+                    return;
+                }
 				if(ui.item) {
-                                    UI.setTaxon(ui.item.id, ui.item.level);
-                                }
-                                else alert("Nothing selected, input was " + this.value);
+                    UI.setTaxon(ui.item.id, ui.item.level);
+                }
+                else alert("Nothing selected, input was " + this.value);
 
-                                // added
-                                $( "#taxon" ).removeClass( "ui-autocomplete-loading" );
+                // added
+                $( "#taxon" ).removeClass( "ui-autocomplete-loading" );
 			},
 			open: function() {
 				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
