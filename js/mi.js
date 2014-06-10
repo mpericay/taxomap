@@ -4,8 +4,8 @@ var MI = {
 	infoboxBounds: null,
 	infoboxPixels: 20,
 	cartodbTiles : null,
-	cartodbApi : "http://marti.cartodb.com/api/v2/sql?",
-	cartodbTable: "https://marti.cartodb.com/tables/mcnb",
+	cartodbApi : "http://mcnb.cartodb.com/api/v2/sql?",
+	cartodbTable: "https://mcnb.cartodb.com/tables/mcnb",
 
     zoomToPoint: function(latlon,zoomScale){
         var map = eGV.getMap();
@@ -192,7 +192,7 @@ var MI = {
         
         this.cartodbTiles = cartodb.Tiles.getTiles({
             type: 'cartodb',
-            user_name: 'marti',
+            user_name: 'mcnb',
             sublayers: [{
              sql: sql,
              cartocss: '#herbari_cartodb{marker-fill: #FFCC00;marker-width: 10;marker-line-color: #FFF;marker-line-width: 1.5;marker-line-opacity: 1;marker-opacity: 0.9;marker-comp-op: multiply;marker-type: ellipse;marker-placement: point;marker-allow-overlap: true;marker-clip: false;marker-multi-policy: largest; }'

@@ -4,8 +4,8 @@ function Taxon (id, level) {
     this.level = (parseInt(level));
     this.name = null;
     this.tree = null;
-    this.levels = new Array("domain", "kingdom", "phylum", "class", "_order", "family", "genus", "canonicalname","scientificname");
-    this.levelsId = new Array("domain", "kingdomid", "phylumid", "classid", "orderid", "familyid", "genusid", "speciesid","subspeciesid");
+    this.levels = new Array("domain", "kingdom", "phylum", "class", "_order", "family", "genus", "species", "subspecies");
+    this.levelsId = new Array("domain", "kingdom", "phylum", "class", "_order", "familyid", "genusid", "speciesid", "subspeciesid");
 }
 
 Taxon.prototype.getSqlSelect = function() {
