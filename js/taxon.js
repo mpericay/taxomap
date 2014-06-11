@@ -33,7 +33,8 @@ function Taxon (id, level) {
             "decimallatitude": null,
             "coordinateuncertaintyinmeters": null,
             "minimumelevationinmeters": null,
-            "maximumelevationinmeters": null
+            "maximumelevationinmeters": null,
+            "the_geom": null
     };
 }
 
