@@ -124,7 +124,7 @@ Taxon.prototype.getName = function() {
     }
 };
 
-Taxon.prototype.getSqlSearch = function(term) {
+Taxon.prototype.getSqlSearch = function(term, table) {
     var sqlSelect = "";
     // we select all levels except last
     var maxLevel = this.levels.length - 1;
@@ -134,7 +134,7 @@ Taxon.prototype.getSqlSearch = function(term) {
         sqlSelect += "SELECT DISTINCT " + this.levels[i] + " AS label";
         sqlSelect += "," + this.levelsId[i] + " AS id,";
         sqlSelect += i + " AS level";
-        sqlSelect += " FROM mcnb WHERE UPPER(" + this.levels[i] + ") LIKE UPPER('" + term + "%')";       
+        sqlSelect += " FROM " + table + " WHERE UPPER(" + this.levels[i] + ") LIKE UPPER('" + term + "%')";       
     }
     sqlSelect += " ORDER BY label"
     
@@ -152,7 +152,6 @@ Taxon.prototype.getSqlDownload = function() {
           if(this.downloadFields[prop]) sqlSelect += " AS \"" + this.downloadFields[prop] + "\"";
         }
      }
-    sqlSelect = "select " + sqlSelect + " from mcnb";
     
     return sqlSelect;
 }

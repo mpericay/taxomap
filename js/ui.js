@@ -42,7 +42,7 @@ var UI = {
 		
 		this.drawLanguages();
 
-        // this global variables come from mcnb.php API
+        // this global variables come from taxomap.php API
         this.setTaxon(taxon_id, taxon_level);
         if(initial_view) MI.setInitialView(initial_lat, initial_lon, initial_scale);
 
@@ -63,7 +63,7 @@ var UI = {
         });		
 
         $("#buttonQuotes").click(function() {
-            window.open(MI.cartodbTable);
+            window.open(MI.getCartodbTableUrl());
         });
 		
 		$("#buttonQuotesCSV").click(function() {
@@ -117,7 +117,7 @@ var UI = {
         var newTaxon = new Taxon(taxon_id, level);
 
         //add/change the cartoDB taxon layer
-        MI.loadCartodbLayer("select * from mcnb" + newTaxon.getSqlWhere());
+        MI.loadCartodbLayer("select * from " + MI.cartodbTable + newTaxon.getSqlWhere());
 
         //loading while AJAX request
         Menu.loading();
@@ -125,7 +125,7 @@ var UI = {
         // get taxon parents and children
         $.getJSON(MI.cartodbApi + "callback=?", //for JSONP
         {
-          q: "SELECT DISTINCT "+newTaxon.getSqlSelect()+" FROM mcnb " + newTaxon.getSqlWhere() + newTaxon.getSqlOrderBy()
+          q: "SELECT DISTINCT "+newTaxon.getSqlSelect()+" FROM " + MI.cartodbTable + " " + newTaxon.getSqlWhere() + newTaxon.getSqlOrderBy()
         },
         function(data){
             if(data && data.total_rows) {
@@ -413,7 +413,7 @@ var UI = {
             b: 300,
             minLength: 3,
             source: function(request, response) {
-                var sqlQuery = UI.taxon.getSqlSearch(request.term);
+                var sqlQuery = UI.taxon.getSqlSearch(request.term, MI.cartodbTable);
                 
                 $.getJSON(MI.cartodbApi + "callback=?", //for JSONP
                 {

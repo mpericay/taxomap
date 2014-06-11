@@ -5,7 +5,12 @@ var MI = {
 	infoboxPixels: 20,
 	cartodbTiles : null,
 	cartodbApi : "http://mcnb.cartodb.com/api/v2/sql?",
-	cartodbTable: "https://mcnb.cartodb.com/tables/mcnb",
+	cartodbTable: "mcnb",
+	cartodbUser: "mcnb",
+	
+	getCartodbTableUrl: function() {
+	    return "https://" + this.cartodbUser + ".cartodb.com/tables/" + this.cartodbTable;
+	},
 
     zoomToPoint: function(latlon,zoomScale){
         var map = eGV.getMap();
@@ -99,7 +104,7 @@ var MI = {
 
 		if(!format) format = "csv";
         
-        var query = UI.taxon.getSqlDownload() + " where " + UI.taxon.levelsId[UI.taxon.level] + "='"+UI.taxon.id+"'";
+        var query = "select " + UI.taxon.getSqlDownload() + " from " + this.cartodbTable + " where " + UI.taxon.levelsId[UI.taxon.level] + "='"+UI.taxon.id+"'";
         if(bbox) {
             bbox = this.getBoundsFromPosition(this.infoboxBounds);
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox
@@ -173,7 +178,7 @@ var MI = {
         
         $.getJSON(this.cartodbApi,
             {
-            q: "select count(*)," + UI.taxon.levelsId[childrenLevel] + " as id," + UI.taxon.levels[childrenLevel] + " as name from mcnb where " + UI.taxon.levelsId[UI.taxon.level] +"='" + UI.taxon.id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
+            q: "select count(*)," + UI.taxon.levelsId[childrenLevel] + " as id," + UI.taxon.levels[childrenLevel] + " as name from " + this.cartodbTable + " where " + UI.taxon.levelsId[UI.taxon.level] +"='" + UI.taxon.id + "' and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bounds.left+","+bounds.bottom+"),ST_Point("+bounds.right+","+bounds.top+")),4326)) group by id, name order by count(*) desc"
             //BBOX: bounds.toBBOX(3,false)
             },
             function(data){
@@ -192,7 +197,7 @@ var MI = {
         
         this.cartodbTiles = cartodb.Tiles.getTiles({
             type: 'cartodb',
-            user_name: 'mcnb',
+            user_name: this.cartodbUser,
             sublayers: [{
              sql: sql,
              cartocss: '#herbari_cartodb{marker-fill: #FFCC00;marker-width: 10;marker-line-color: #FFF;marker-line-width: 1.5;marker-line-opacity: 1;marker-opacity: 0.9;marker-comp-op: multiply;marker-type: ellipse;marker-placement: point;marker-allow-overlap: true;marker-clip: false;marker-multi-policy: largest; }'
