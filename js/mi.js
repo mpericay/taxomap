@@ -99,7 +99,7 @@ var MI = {
 
 		if(!format) format = "csv";
         
-        var query = "select * from mcnb where " + UI.taxon.levelsId[UI.taxon.level] + "='"+UI.taxon.id+"'";
+        var query = UI.taxon.getSqlDownload() + " where " + UI.taxon.levelsId[UI.taxon.level] + "='"+UI.taxon.id+"'";
         if(bbox) {
             bbox = this.getBoundsFromPosition(this.infoboxBounds);
             query += " and (the_geom && ST_SetSRID(ST_MakeBox2D(ST_Point("+bbox.left+","+bbox.bottom+"),ST_Point("+bbox.right+","+bbox.top+")),4326))"; // we include bbox

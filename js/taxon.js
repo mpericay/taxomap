@@ -6,6 +6,35 @@ function Taxon (id, level) {
     this.tree = null;
     this.levels = new Array("domain", "kingdom", "phylum", "class", "_order", "family", "genus", "species", "subspecies");
     this.levelsId = new Array("domain", "kingdom", "phylum", "class", "_order", "familyid", "genusid", "speciesid", "subspeciesid");
+    this.downloadFields = {
+            // "fieldname": "alias" (if null, no alias)
+            "institutioncode": null,
+            "collectioncode": null,
+            "catalognumber": null,
+            "scientificname": null,
+            "domain": null,
+            "kingdom": null,
+            "phylum": null,
+            "class": null,
+            "_order": "order",
+            "family": null,
+            "genus": null,
+            "specificepithet": null,
+            "infraspecificepithet": null,
+            "scientificnameauthorship": null,
+            "identifiedby": null,
+            "dateidentified": null,
+            "typestatus": null,
+            "eventdate": null,
+            "countrycode": null,
+            "stateprovince": null,
+            "locality": null,
+            "decimallongitude": null,
+            "decimallatitude": null,
+            "coordinateuncertaintyinmeters": null,
+            "minimumelevationinmeters": null,
+            "maximumelevationinmeters": null
+    };
 }
 
 Taxon.prototype.getSqlSelect = function() {
@@ -111,3 +140,19 @@ Taxon.prototype.getSqlSearch = function(term) {
     
     return sqlSelect;
 };
+
+Taxon.prototype.getSqlDownload = function() {
+    var sqlSelect = "";
+    for (var prop in this.downloadFields) {
+        // important check that this is objects own property 
+        // not from prototype prop inherited
+        if(this.downloadFields.hasOwnProperty(prop)){
+          if(sqlSelect) sqlSelect += ", ";
+          sqlSelect += prop;
+          if(this.downloadFields[prop]) sqlSelect += " AS \"" + this.downloadFields[prop] + "\"";
+        }
+     }
+    sqlSelect = "select " + sqlSelect + " from mcnb";
+    
+    return sqlSelect;
+}
