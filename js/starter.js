@@ -1,6 +1,6 @@
 function initialize(){
 	
-	var defaultExtent = new OpenLayers.Bounds(-13032207.5745,-1917652.1656,12719121.5067,11153691.1674);
+	var defaultExtent = new OpenLayers.Bounds(-11032207.5745,-1917652.1656,14719121.5067,11153691.1674);
     var options = {
         "sphericalMercator": true,
         "maxExtent": new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
