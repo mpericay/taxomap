@@ -15,8 +15,6 @@ var UI = {
 
         this.createHelpDiv();
 
-        this.createLegend(); 
-
         this.createOverview();
 
         this.createInfoDiv();
@@ -151,11 +149,6 @@ var UI = {
         }).error(function(jqXHR, textStatus, errorThrown) { Menu.error(); });
 
     },
-    
-    refreshLegend: function() {
-        // if we need different legends for different levels or detail
-        $("#divLegend").html("<img src='"+serverURL+"/taxomap/img/legends/"+locale+".png' />");
-    },
 
     drawBreadcrumb: function(childArray, level, maxlevel) {
         level = parseInt(level);// must be a number!
@@ -288,25 +281,14 @@ var UI = {
         var right = $(window).width() - UI.dialogWidth - 30;
         var left = $("#divMainLeft").width() + 30;
 
-        if(!$.browser.msie) $("#divOverviewMapContainer").dialog( "option", "position", [left, bottom] );
+        if(!$.browser.msie) $("#divOverviewMapContainer").dialog( "option", "position", [right, bottom] );
         // IE workaround
         else {
                 $("#divOverviewMapContainer").parent().position({
-                   my: "left bottom",
-                   at: "left bottom",
-                   of: $("#divMap"),
-                   offset: "18 -18"
-                });
-        }
-
-        if(!$.browser.msie) $("#divLegendContainer").dialog("option", "position",[right,bottom]);
-        // IE workaround
-        else {
-                $("#divLegendContainer").parent().position({
                    my: "right bottom",
                    at: "right bottom",
                    of: $("#divMap"),
-                   offset: "-18 -18"
+                   offset: "18 -18"
                 });
         }
 
@@ -544,41 +526,7 @@ var UI = {
         $dialog.dialog( "option", "position", dialogPosition );
     },
 
-    createLegend: function(){
-
-       $("#divLegendContainer").dialog({
-            height: UI.dialogHeight,
-            width: UI.dialogWidth,
-            closeOnEscape: false,
-            resizable: false,
-            draggable: true,
-            title: locStrings._section_legend
-        });
-
-        $("#divLegendContainer").prev("div").find(".ui-icon").removeClass("ui-icon-closethick");
-        $("#divLegendContainer").prev("div").find(".ui-icon").addClass("ui-icon-carat-1-s");
-
-        $("#divLegendContainer").dialog( { beforeclose: function(event) {
-
-              //returning false prevents overviewMap closing (and we minimize/maximize it)
-              if(event.originalEvent==undefined) {
-                    // we clicked on a tab or in a document tree link
-                    return true;
-              }
-
-              UI.toggleDialog($("#divLegendContainer"), UI.dialogHeight);
-              return false;
-
-          }
-
-        });
-
-        // we don't need to refresh the legend at every time, so we set the img here
-        this.refreshLegend();
-
-    },
-
-      createInfoDiv: function(){
+    createInfoDiv: function(){
 
         $("#divInfoDialog").dialog({
                 autoOpen: false,

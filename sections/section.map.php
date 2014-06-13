@@ -15,10 +15,6 @@
 	<div id="divScaleSelector"></div>
 </div>
 
-<div id="divLegendContainer">
-    <div id="divLegend"></div>
-</div>
-
 <div id="divOverviewMapContainer">
     <div id="divOverviewMap"></div>
 </div>

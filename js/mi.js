@@ -67,26 +67,6 @@ var MI = {
         return null;
     },
 
-    /**
-     * Method: getLayerLegend
-     * Returns the URL for the image of the layer's legend
-     *
-     * Parameters:
-     * layer_id - {String} the id of the layer
-     */
-    getLayerLegend: function(layer_id){
-        var map = eGV.getMap();
-        for(var i=0, len=map.connections.length; i<len; i++){
-            var layer = map.connections[i].getLayer(layer_id);
-            if(layer != null){
-                return layer.getLegendURL();
-            }
-        }
-        return null;
-    },
-
-
-
     formatScaleStatusBarOutput: function(latlon,scale) {
 	
         var newHtml = "";
