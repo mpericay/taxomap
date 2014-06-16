@@ -205,7 +205,7 @@ var MI = {
                 var cartodbLayer = new OpenLayers.Layer.XYZ(
                         "cartodbLayer",
                         tilesUrl, {
-                          attribution: "(ODbL) Museu de Ciències Naturals de Barcelona",
+                          attribution: "Taxo&Map data by Museu de Ciències Naturals de Barcelona (<a href='http://opendatacommons.org/licenses/odbl/1.0/'  target='_blank'>ODbL</a>)",
                           sphericalMercator: true,
                           isBaseLayer: false
                         });      
