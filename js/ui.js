@@ -281,27 +281,9 @@ var UI = {
         var right = $(window).width() - UI.dialogWidth - 30;
         var left = $("#divMainLeft").width() + 30;
 
-        if(!$.browser.msie) $("#divOverviewMapContainer").dialog( "option", "position", [right, bottom] );
-        // IE workaround
-        else {
-                $("#divOverviewMapContainer").parent().position({
-                   my: "right bottom",
-                   at: "right bottom",
-                   of: $("#divMap"),
-                   offset: "18 -18"
-                });
-        }
+        $("#divOverviewMapContainer").dialog( "option", "position", [right, bottom] );
 
-        if(!$.browser.msie) $("#divInfoDialog").dialog("option", "position", [right-68,top]);
-        // IE workaround
-        else {
-                $("#divInfoDialog").parent().position({
-                   my: "right center",
-                   at: "right center",
-                   of: $("#divMap"),
-                   offset: "-18 -18"
-                });
-        }
+        $("#divInfoDialog").dialog("option", "position", [right-68,top]);
 
         return false;
     },
@@ -323,7 +305,7 @@ var UI = {
         var zoomLevel = eGV.getMap().getZoom();
         var center = eGV.getMap().getCenter();
         
-	this.resizeElements();
+        this.resizeElements();
 
         eGV.getMap().setCenter(center, zoomLevel);
         eGV.getMap().updateSize();
@@ -751,9 +733,6 @@ var UI = {
 function initializeWrapper(){
     return UI.initialize();
 }
-
-//Ask IE
-document.namespaces;
 
 $(document).ready (function() {
     initializeWrapper();
