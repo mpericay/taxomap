@@ -10,8 +10,6 @@ require_once("php/functions.php");
 
 $serverURL = "http://".$_SERVER['SERVER_NAME'];
 if ($_SERVER['SERVER_PORT'] != "80") $serverURL .= ":".$_SERVER['SERVER_PORT'];
-//for development purposes
-if (defined('_GEOSERVICES_DEV_URL') && $serverURL == "http://localhost") $serverURL = _GEOSERVICES_DEV_URL;
 
 // get API parameters 
 $taxon_id = getParameter("id", _DEFAULT_TAXON_ID);
@@ -39,7 +37,7 @@ $locStrings = buildClientStrings();
         <meta http-equiv="Content-Script-Type" content="text/javascript" />
         <meta name="keywords" lang="<?php echo _GENERIC_LANG_CODE; ?>" content="<?php echo _INDEX_META_KEYWORDS; ?>" />
         <meta name="description" lang="<?php echo _GENERIC_LANG_CODE; ?>" content="<?php echo _INDEX_META_DESCRIPTION; ?>" />
-        <meta name="author" content="info@geodata.es" />
+        <meta name="author" content="marti@pericay.com" />
         <meta name="robots" content="index,follow" />
         <link type="text/css" href="css/default.css" rel="stylesheet" />
         <link type="text/css" href="css/blue/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
@@ -65,7 +63,6 @@ $locStrings = buildClientStrings();
 
             var taxon_id = "<?= $taxon_id ?>";
             var taxon_level = "<?= $taxon_level ?>";
-            var scale_change = <?= _SCALE_CHANGE ?>;
 
             <? if($localize) { ?>
                 // API localization

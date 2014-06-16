@@ -10,8 +10,6 @@ require_once("php/functions.php");
 
 $serverURL = "http://".$_SERVER['SERVER_NAME'];
 if ($_SERVER['SERVER_PORT'] != "80") $serverURL .= ":".$_SERVER['SERVER_PORT'];
-//for development purposes 
-if (defined('_GEOSERVICES_DEV_URL') && $serverURL == "http://localhost") $serverURL = _GEOSERVICES_DEV_URL;
 
 // get API parameters
 $taxon_id = getParameter("id", _DEFAULT_TAXON_ID);
@@ -46,7 +44,7 @@ $locStrings = buildClientStrings();
         <link type="text/css" href="css/blue/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
         
 		<!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&v=3.6"></script>-->
-        <script type="text/javascript" src="js/openlayers-2.12/OpenLayers.js"></script>
+        <script type="text/javascript" src="js/openlayers-2.13.1/OpenLayers.js"></script>
         <script type="text/javascript" src="js/viewer-3.0/client/egv-init-c.js"></script>
         <script type="text/javascript" src="js/class.infobox.js"></script>
 		<script type="text/javascript" src="js/class.infopan.js"></script>
@@ -63,7 +61,6 @@ $locStrings = buildClientStrings();
 
             var taxon_id = "<?= $taxon_id ?>";
             var taxon_level = "<?= $taxon_level ?>";
-            var scale_change = <?= _SCALE_CHANGE ?>;
 
             <? if($localize) { ?>
                 // API localization
