@@ -43,7 +43,12 @@ function initialize(){
 					"http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
 					"http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"];	
 					
-	var zoomOptions = {minZoomLevel: 5, numZoomLevels: 12};
+	var zoomOptions = {
+	        minZoomLevel: 5, 
+	        numZoomLevels: 12,
+	        attribution: "Data, imagery and map information provided by <a href='http://www.mapquest.com/'  target='_blank'>MapQuest</a>, <a href='http://www.openstreetmap.org/' target='_blank'>Open Street Map</a> and contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/' target='_blank'>CC-BY-SA</a>  <img src='http://developer.mapquest.com/content/osm/mq_logo.png' border='0'>",
+            transitionEffect: "resize"
+    };
 
 	var baseMapQuest = new OpenLayers.Layer.XYZ("MapQuest-OSM Tiles", arrayMapQuest, zoomOptions);
 	var baseAerial = new OpenLayers.Layer.XYZ("MapQuest Open Aerial Tiles", arrayAerial, zoomOptions);
