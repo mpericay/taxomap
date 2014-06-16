@@ -1,11 +1,15 @@
 <?php
 
 /**
- * General functions
- * @details &copy;2011 - Geodata Sistemas SL
- * @file functions.php
- * @version 1.0
- * @see conf.php
+ * Functions for Taxo&Map application
+ *
+ * @author     Marti Pericay <marti@pericay.com>
+ * @copyright  (c) 2014 by Museu de Ciències Naturals de Barcelona
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License
+ * 
+ * This program is free software. You can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License.
  */
 
 require_once("conf.php");

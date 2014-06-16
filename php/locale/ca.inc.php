@@ -1,17 +1,16 @@
 <?php
 
-//******************************************************************************
-//
-// Copyright (c) 2012 by Geodata Sistemas S.L.
-// http://www.geodata.es
-//
-// Language definitions file: Català
-//
-// This program is free software. You can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License.
-//
-//******************************************************************************
+/**
+ * Language definitions file for the Taxo&Map application: català
+ *
+ * @author     Marti Pericay <marti@pericay.com>
+ * @copyright  (c) 2014 by Museu de Ciències Naturals de Barcelona
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License
+ * 
+ * This program is free software. You can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License.
+ */
 
 
 define("_LOCALE", "ca");
