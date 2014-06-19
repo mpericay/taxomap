@@ -1,7 +1,7 @@
 var UI = {
 
     modalHelpWidth: 580,
-	modalWidth: 600,
+	modalWidth: 700,
     taxon: null,
     dialogHeight: 153,
     dialogWidth: 180,
