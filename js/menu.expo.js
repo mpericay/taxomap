@@ -11,14 +11,16 @@ var Menu = {
         var data = "<div class='error'>";
         data += locStrings._error_msg;
         if(message) data += ":<br>" + message;
-        data += "<br><a href='mcnb.php'>" + locStrings._error_back + "</a>";
+        data += "<br><a href='taxomap.php'>" + locStrings._error_back + "</a>";
         data += "</div>";
         $("#taxon-list").html(data);
     },
 
-    update: function(parent, child, level) {
-        level = parseInt(level);// must be a number!
-        Menu.direction = (level > UI.active_taxon_level) ? "right" : "left";
+    update: function(taxon) {
+        var parent = taxon.getParent();
+        var child = taxon.getChild();
+        var level = taxon.level;
+        Menu.direction = (UI.taxon && (level > UI.taxon.level)) ? "right" : "left";
         $("#taxon-list ul").menu19("destroy");
 
         $("#taxon-list").html("<ul></ul>");
@@ -29,7 +31,7 @@ var Menu = {
         var data = "<li class='menuTitle'>";
         data += "<a href=\"#\">" + active_taxon + "</a>";
         data += "</li>";
-        
+
         $("#taxon-list ul").append(data);
         if(child && child["children"]) $("#taxon-list ul").append(Menu.drawChildren(child["children"], level));
 
@@ -43,12 +45,15 @@ var Menu = {
         var data = "";
 
         for(var i=0; i<childArray.length; i++) {
-            data += "<li>";
-            data += "<a href=\"javascript:UI.setTaxon('"+childArray[i]['id']+"',"+level+")\" title=\""+locStrings._generic_activate+" "+childArray[i]['name']+"\">";
-            data += childArray[i]['name'];
-            data += '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>';
-            data+= "</a>";
-            data += "</li>";
+            //if no id, we don't want to show the possibility to go further: there's no information
+            if(childArray[i]['id']) {
+                data += "<li>";
+                data += "<a href=\"javascript:UI.setTaxon('"+childArray[i]['id']+"',"+level+")\" title=\""+locStrings._generic_activate+" "+childArray[i]['name']+"\">";
+                data += childArray[i]['name'];
+                data += '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>';
+                data+= "</a>";
+                data += "</li>";
+            }
         }
 
         return data;

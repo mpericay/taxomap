@@ -52,6 +52,9 @@ $locStrings = buildClientStrings();
         <script type="text/javascript" src="js/jquery/jquery-ui-1.8.16.slide.min.js"></script>
         <!-- we use MENU from jQuery-1.9 because we need to include links -->
         <script type="text/javascript" src="js/jquery/jquery.ui.menu-1.9.js"></script>
+        
+        <!-- include cartodb.core.js library -->
+    	<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.core.js"></script>        
 
         <script type="text/javascript">
             var locale = "<?php echo _GENERIC_LANG_CODE; ?>";
@@ -73,6 +76,7 @@ $locStrings = buildClientStrings();
             <? } ?>
         </script>
 
+        <script type="text/javascript" src="js/taxon.js"></script>
         <script type="text/javascript" src="js/ui.expo.js"></script>
         <script type="text/javascript" src="js/menu.expo.js"></script>
         <script type="text/javascript" src="js/starter.js"></script>
