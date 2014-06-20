@@ -583,7 +583,7 @@ var UI = {
         for(var i=0; i<arrayLocales.length; i++) {
             if(arrayLocales[i] != locale) {
                 var name = localeNames[arrayLocales[i]];
-                data += '<a href="taxomap.php?lang=' + arrayLocales[i] + '" title="'+ name +'">'+ name +'</a>';
+                data += '<a href="mcnb.php?lang=' + arrayLocales[i] + '" title="'+ name +'">'+ name +'</a>';
             }
         }
         
