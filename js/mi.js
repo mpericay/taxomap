@@ -5,7 +5,7 @@ var MI = {
 	infoboxPixels: 20,
 	cartodbTiles : null,
 	cartodbApi : "http://mcnb.cartodb.com/api/v2/sql?",
-	cartodbTable: "mcnb",
+	cartodbTable: "mcnb_prod",
 	cartodbUser: "mcnb",
 	
 	getCartodbTableUrl: function() {
