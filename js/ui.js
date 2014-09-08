@@ -331,6 +331,7 @@ var UI = {
 
     createSheetDiv: function(){
 
+        var footer = '<div id="links"><div id="bottomTitle">' + locStrings._generic_moreinfo + ':</div><a id="wikispecies" target="_blank"><img alt="Wikispecies Logo" title="Consultar Wikispecies" src="img/logos/wikispecies.png" /></a><a id="eol" target="_blank"><img alt="Encyclopedia Of Life Logo" title="Consultar Encyclopedia Of Life" src="img/logos/eol.png" /></a><a id="gbif" target="_blank"><img alt="GBIF Logo" title="Consultar GBIF" src="img/logos/gbif.jpg" /></a></div>';
         $("#divSheetModal").dialog({
                 autoOpen: false,
                 modal: true,
@@ -342,7 +343,12 @@ var UI = {
                 close: function() {
                     $("#divSheetModal #content").hide();
                     $("#divSheetModal #loading").show();
+                },
+                dialogClass: "sheetDialog",
+                create: function() {
+                    $(".sheetDialog").append(footer);
                 }
+                
         });
      },
 
@@ -549,7 +555,7 @@ var UI = {
                 }
                 div.find("#content").show();
                 div.find("#loading").hide();
-                UI.drawLinksSheet(div, UI.taxon.getName());
+                UI.drawLinksSheet(UI.taxon.getName());
         });
              
 
@@ -610,7 +616,8 @@ var UI = {
 
      },
      
-     drawLinksSheet: function(div, title){
+     drawLinksSheet: function(title){
+         var div = $("#links");
          div.find("#wikispecies").attr("href", "http://species.wikimedia.org/wiki/"+title);
          div.find("#gbif").attr("href", "http://www.gbif.org/species/search?q="+title);
          div.find("#eol").attr("href", "http://www.eol.org/search?q="+title.replace(" ","+"));

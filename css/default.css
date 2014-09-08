@@ -318,15 +318,15 @@ select {
     padding: 10px;
 }
 
-#divSheetModal #links {
+#links {
     padding: 10px;
+    padding-left:40px;
     color: #57b4df;
     font-weight:bold;
     border-top:1px solid #e5e5e5;
-    clear: both;
 }
 
-#divSheetModal #links img {
+#links img {
     height: 56px;
     padding: 10px;
 }

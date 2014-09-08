@@ -17,12 +17,7 @@
         <div id="swfvideo">
             <embed src="" height="300" width="430"> 
         </div> -->		    
-        <div id="links">
-            <div id="bottomTitle"><?= _GENERIC_MOREINFO ?>:</div>
-            <a id="wikispecies" target="_blank"><img alt="Wikispecies Logo" title="Consultar Wikispecies" src="img/logos/wikispecies.png" /></a>
-            <a id="eol" target="_blank"><img alt="Encyclopedia Of Life Logo" title="Consultar Encyclopedia Of Life" src="img/logos/eol.png" /></a>
-            <a id="gbif" target="_blank"><img alt="GBIF Logo" title="Consultar GBIF" src="img/logos/gbif.jpg" /></a>
-        </div>	    
+	    
 	 </div>
 	 
 	 <div id="loading">
