@@ -34,47 +34,52 @@ function initialize(){
 
 	/*********** START LAYERS **********/
 
-	var arrayMapQuest = ["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-				"http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-				"http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-				"http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"];
-	var arrayAerial = ["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-					"http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-					"http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-					"http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"];	
+	var arrayOSM = ["http://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+				"http://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+				"http://a.tile.openstreetmap.org/${z}/${x}/${y}.png"];
+	var arrayAerial = ["http://0.tile.openstreetmap.se/hydda/base/${z}/${x}/${y}.png",
+					"http://1.tile.openstreetmap.se/hydda/base/${z}/${x}/${y}.png",
+					"http://2.tile.openstreetmap.se/hydda/base/${z}/${x}/${y}.png",
+					"http://3.tile.openstreetmap.se/hydda/base/${z}/${x}/${y}.png"];	
 					
 	var zoomOptions = {
 	        minZoomLevel: 5, 
 	        numZoomLevels: 12,
-	        attribution: "Data, imagery and map information provided by <a href='http://www.mapquest.com/'  target='_blank'>MapQuest</a>, <a href='http://www.openstreetmap.org/' target='_blank'>Open Street Map</a> and contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/' target='_blank'>CC-BY-SA</a>  <img src='http://developer.mapquest.com/content/osm/mq_logo.png' border='0'>",
+	        attribution: "&copy; <a href='http://www.openstreetmap.org/copyright' target='_blank'>OpenStreetMap</a> contributors",
+            transitionEffect: "resize"
+    };
+	
+	var zoomOptions2 = {
+	        minZoomLevel: 5, 
+	        numZoomLevels: 12,
+	        attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             transitionEffect: "resize"
     };
 
-	var baseMapQuest = new OpenLayers.Layer.XYZ("MapQuest-OSM Tiles", arrayMapQuest, zoomOptions);
-	var baseAerial = new OpenLayers.Layer.XYZ("MapQuest Open Aerial Tiles", arrayAerial, zoomOptions);
-	//var gbifLayer = new OpenLayers.Layer.OSM("GBIF Mammalia Tiles", ["http://api.gbif.org/v0.9/map/density/tile?x=${x}&y=${y}&z=${z}&type=PUBLISHER&key=e8eada63-4a33-44aa-b2fd-4f71efb222a0&layer=OBS_NO_YEAR&layer=SP_NO_YEAR&layer=OTH_NO_YEAR&layer=OBS_1900_1910&layer=SP_1900_1910&layer=OTH_1900_1910&layer=OBS_1910_1920&layer=SP_1910_1920&layer=OTH_1910_1920&layer=OBS_1920_1930&layer=SP_1920_1930&layer=OTH_1920_1930&layer=OBS_1930_1940&layer=SP_1930_1940&layer=OTH_1930_1940&layer=OBS_1940_1950&layer=SP_1940_1950&layer=OTH_1940_1950&layer=OBS_1950_1960&layer=SP_1950_1960&layer=OTH_1950_1960&layer=OBS_1960_1970&layer=SP_1960_1970&layer=OTH_1960_1970&layer=OBS_1970_1980&layer=SP_1970_1980&layer=OTH_1970_1980&layer=OBS_1980_1990&layer=SP_1980_1990&layer=OTH_1980_1990&layer=OBS_1990_2000&layer=SP_1990_2000&layer=OTH_1990_2000&layer=OBS_2000_2010&layer=SP_2000_2010&layer=OTH_2000_2010&layer=OBS_2010_2020&layer=SP_2010_2020&layer=OTH_2010_2020&layer=LIVING&layer=FOSSIL&palette=yellows_reds&resolution=8"], zoomOptions);
+	var baseOSM = new OpenLayers.Layer.XYZ("OSM Tiles", arrayOSM, zoomOptions);
+	var baseAerial = new OpenLayers.Layer.XYZ("Hydda", arrayAerial, zoomOptions2);
 	
     var egvConnOSM = [
 
-        egvConnOSM1 = new eGV.Connection(
+        egvConnOSM2 = new eGV.Connection(
+            "OSM Map",
+            baseOSM,
+                {
+                "id":"OSMMap",
+                "title":locStrings._map,
+    			"visible": true
+            }
+            ),
+		
+		egvConnOSM1 = new eGV.Connection(
             "OSM Aerial",
             baseAerial,
                 {
                 "id":"OSMAerial",
                 "title":locStrings._satellite,
-    			"visible": true		
+    			"visible": false		
             }
-            ),
-    	
-    	egvConnOSM2 = new eGV.Connection(
-            "OSM Map",
-            baseMapQuest,
-                {
-                "id":"OSMMap",
-                "title":locStrings._map,
-    			"visible": false
-            }
-            )           
+            )          
     ];
 
     map.addConnections(egvConnOSM);

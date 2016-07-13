@@ -98,7 +98,7 @@ define("_TAXON_PARENT", "Tàxon superior");
 //
 //************************************************************************
 define("_HYBRID", "Híbrid");
-define("_SATELLITE", "Satèl·lit");
+define("_SATELLITE", "Terreny");
 define("_TERRAIN", "Relleu");
 define("_MAP", "Mapa");
 

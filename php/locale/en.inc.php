@@ -98,7 +98,7 @@ define("_TAXON_PARENT", "Parent taxon");
 //
 //************************************************************************
 define("_HYBRID", "Hybrid");
-define("_SATELLITE", "Satellite");
+define("_SATELLITE", "Terrain");
 define("_TERRAIN", "Terrain");
 define("_MAP", "Map");
 
